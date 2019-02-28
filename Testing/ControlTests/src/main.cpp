@@ -37,7 +37,7 @@ int main() {
     yawRate = 0;
     thrust = 1.0;
 
-    k = 1.0;
+    k = 0.5;
 
 
     while (window.isOpen()) {
