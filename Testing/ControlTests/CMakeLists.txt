@@ -4,6 +4,8 @@ project(ControlTests)
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(SFML 2.5 REQUIRED network audio graphics window system)
+find_package(roscpp)
+find_package(std_msgs REQUIRED)
 
 set(TARGET_LIBS sfml-graphics sfml-window sfml-system pthread GL)
 link_libraries(${TARGET_LIBS})

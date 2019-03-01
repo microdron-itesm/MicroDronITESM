@@ -103,11 +103,11 @@ double roll = imu.roll + 180;
     roll -= 360;
   } 
 
+  Serial1.print(","); 
   Serial1.print(yaw);
   Serial1.print(" "); 
   Serial1.print(pitch);
   Serial1.print(" "); 
   Serial1.println(roll);
-
 }
 

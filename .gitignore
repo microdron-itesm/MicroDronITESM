@@ -50,3 +50,5 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+/MicroDron/firmware/MicroDron.X/dist/
+/MicroDron/firmware/MicroDron.X/build/
