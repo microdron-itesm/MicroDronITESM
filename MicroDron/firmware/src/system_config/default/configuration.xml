@@ -5,7 +5,7 @@
     <SystemStartScript dnOrder="1"/>
   </DisplayManager>
   <General>
-    <HarmonyPath dnOrder="0" path="../../../microchip/harmony/v2_06"/>
+    <HarmonyPath dnOrder="0" path="../../../../microchip/harmony/v2_06"/>
     <Processor dnOrder="1" name="PIC32MZ2048ECM100"/>
     <Board dnOrder="2" name=" "/>
     <ForceOptimization dnOrder="3" flag="true"/>
@@ -271,15 +271,15 @@
     </Templates>
     <CompilerItems dnOrder="2">
       <C32 dnOrder="0">
-        <Include dnOrder="0" value="/home/rodrigovqz/Documents/MicroDronITESM/MicroDron/firmware/src"/>
-        <Include dnOrder="1" value="/home/rodrigovqz/Documents/MicroDronITESM/MicroDron/firmware/src/system_config/default"/>
-        <Include dnOrder="2" value="/home/rodrigovqz/Documents/MicroDronITESM/MicroDron/firmware/src/default"/>
+        <Include dnOrder="0" value="/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src"/>
+        <Include dnOrder="1" value="/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/system_config/default"/>
+        <Include dnOrder="2" value="/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/default"/>
         <Include dnOrder="3" value="/home/rodrigovqz/microchip/harmony/v2_06/framework"/>
-        <Include dnOrder="4" value="/home/rodrigovqz/Documents/MicroDronITESM/MicroDron/firmware/src/system_config/default/framework"/>
+        <Include dnOrder="4" value="/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/system_config/default/framework"/>
       </C32>
     </CompilerItems>
     <Libraries dnOrder="3">
-      <Library dnOrder="0" value="../../../../../microchip/harmony/v2_06/bin/framework/peripheral/PIC32MZ2048ECM100_peripherals.a"/>
+      <Library dnOrder="0" value="../../../../../../microchip/harmony/v2_06/bin/framework/peripheral/PIC32MZ2048ECM100_peripherals.a"/>
     </Libraries>
   </Manifest>
 </Configuration>
