@@ -22,10 +22,17 @@
   - ATSAMD21 (Arduino Zero, SparkFun SAMD21 Breakouts)
 *************************************************************/
 #include <SparkFunMPU9250-DMP.h>
+#include <SparkFunMPL3115A2.h>
+#include <SimpleKalmanFilter.h>
 
 #define SerialPort SerialUSB
 
 MPU9250_DMP imu;
+MPL3115A2 altimeter;
+double errorEstimate = 100.0;
+
+SimpleKalmanFilter pressureKalmanFilter( errorEstimate, errorEstimate, 0.01);
+
 
 void setup()
 {
@@ -52,6 +59,14 @@ void setup()
   // DMP_FEATURE_LP_QUAT can also be used. It uses the
   // accelerometer in low-power mode to estimate quat's.
   // DMP_FEATURE_LP_QUAT and 6X_LP_QUAT are mutually exclusive
+
+  altimeter.begin();
+
+  altimeter.setModeAltimeter(); 
+  
+  altimeter.setOversampleRate(7); 
+  altimeter.enableEventFlags();
+
 }
 
 void loop()
@@ -103,11 +118,23 @@ double roll = imu.roll + 180;
     roll -= 360;
   } 
 
+  double altitude = altimeter.readAltitude() * 1000 - 490000;
+  float estimated_altitude = pressureKalmanFilter.updateEstimate(altitude);
+
+  SerialPort.print(yaw);
+  SerialPort.print(" ");
+  SerialPort.print(pitch);
+  SerialPort.print(" ");
+  SerialPort.println(roll);
+
   Serial1.print(","); 
   Serial1.print(yaw);
   Serial1.print(" "); 
   Serial1.print(pitch);
-  Serial1.print(" "); 
-  Serial1.println(roll);
+  Serial1.print(" ");
+  Serial1.print(roll);
+  Serial1.print(" ");
+  Serial1.println(estimated_altitude);
+
 }
 

@@ -18,15 +18,15 @@ int i;
 
 APP_DATA appData;
 
-void APP_Initialize ( void ){
+void APP_Initialize(void) {
     DRV_TMR0_Start();
     DRV_TMR1_Start();
     DRV_USART0_Initialize();
     DRV_USART1_Initialize();
-    DRV_OC0_Start ();
-    DRV_OC1_Start ();
-    DRV_OC2_Start ();
-    DRV_OC3_Start ();
+    DRV_OC0_Start();
+    DRV_OC1_Start();
+    DRV_OC2_Start();
+    DRV_OC3_Start();
     //DRV_OC0_PulseWidthSet (1250);
     //DRV_OC1_PulseWidthSet (2500);
     //DRV_OC2_PulseWidthSet (3750);
@@ -36,178 +36,187 @@ void APP_Initialize ( void ){
     TRISAbits.TRISA2 = 0b0;
 }
 
-void APP_Tasks ( void ){
+void APP_Tasks(void) {
     /* Check the application's current state. */
-    switch ( appData.state ){
-        /* Application's initial state. */
-        case APP_STATE_INIT:{
+    switch (appData.state) {
+            /* Application's initial state. */
+        case APP_STATE_INIT:
+        {
             bool appInitialized = true;
-            if (appInitialized){
+            if (appInitialized) {
                 appData.state = APP_STATE_SERVICE_TASKS;
             }
         }
-        break;
-        case APP_STATE_SERVICE_TASKS:{
-            DRV_TMR1_CounterClear ();
-            while(1){
-                if(!DRV_USART0_ReceiverBufferIsEmpty()){
-                    readcode=DRV_USART0_ReadByte();
-                }
-                switch (readcode){
-                    case 'U' :{
-                        dutycycle0 = 5000;
-                        DRV_OC0_PulseWidthSet(dutycycle0);
-                        DRV_OC1_PulseWidthSet (dutycycle0);
-                        DRV_OC2_PulseWidthSet (dutycycle0);
-                        DRV_OC3_PulseWidthSet (dutycycle0);
-                        readcode='\0';
-                    }
-                    break;
-                    case 'D' :{
-                        dutycycle0 = 0;
-                        DRV_OC0_PulseWidthSet (dutycycle0);
-                        DRV_OC1_PulseWidthSet (dutycycle0);
-                        DRV_OC2_PulseWidthSet (dutycycle0);
-                        DRV_OC3_PulseWidthSet (dutycycle0);
-                        readcode='\0';
-                    }
-                    break;
-                    case 'L' :{
-                        dutycycle0 = 5000;
-                        dutycycle1 = 0;
-                        DRV_OC0_PulseWidthSet (dutycycle0);
-                        DRV_OC1_PulseWidthSet (dutycycle0);
-                        DRV_OC2_PulseWidthSet (dutycycle1);
-                        DRV_OC3_PulseWidthSet (dutycycle1);
-                        readcode='\0';
-                    }
-                    break;
-                    case 'R' :{
-                        dutycycle0 = 5000;
-                        dutycycle1 = 0;
-                        DRV_OC0_PulseWidthSet (dutycycle1);
-                        DRV_OC1_PulseWidthSet (dutycycle1);
-                        DRV_OC2_PulseWidthSet (dutycycle0);
-                        DRV_OC3_PulseWidthSet (dutycycle0);
-                        readcode='\0';
-                    }
-                    break;
-                    case 'A' :{
-                        dutycycle0 -= 500;
-                        if(dutycycle0 < 0)
-                        {
-                            dutycycle0 = 0;
-                        }
-                        dutycycle1 = 0;
-                        DRV_OC0_PulseWidthSet (dutycycle1);
-                        DRV_OC1_PulseWidthSet (dutycycle1);
-                        DRV_OC2_PulseWidthSet (dutycycle0);
-                        DRV_OC3_PulseWidthSet (dutycycle0);
-                        readcode='\0';
-                    }
-                    break;
-                        case 'S' :{
-                        dutycycle0 -= 500;
-                        if(dutycycle0 < 0)
-                        {
-                            dutycycle0 = 0;
-                        }
-                        dutycycle1 = 0;
-                        DRV_OC0_PulseWidthSet (dutycycle0);
-                        DRV_OC1_PulseWidthSet (dutycycle0);
-                        DRV_OC2_PulseWidthSet (dutycycle1);
-                        DRV_OC3_PulseWidthSet (dutycycle1);
-                        readcode='\0';
-                    }
-                    break;
-                        case 'B' :{
-                        dutycycle0 += 500;
-                        if(dutycycle0 > 5000)
-                        {
-                            dutycycle0 = 5000;
-                        }
-                        dutycycle1 = 0;
-                        DRV_OC0_PulseWidthSet (dutycycle1);
-                        DRV_OC1_PulseWidthSet (dutycycle1);
-                        DRV_OC2_PulseWidthSet (dutycycle0);
-                        DRV_OC3_PulseWidthSet (dutycycle0);
-                        readcode='\0';
-                    }
-                    break;
-                    case 'C' :{
-                        dutycycle0 += 500;
-                        if(dutycycle0 > 5000)
-                        {
-                            dutycycle0 = 5000;
-                        }
-                        dutycycle1 = 0;
-                        DRV_OC0_PulseWidthSet (dutycycle0);
-                        DRV_OC1_PulseWidthSet (dutycycle0);
-                        DRV_OC2_PulseWidthSet (dutycycle1);
-                        DRV_OC3_PulseWidthSet (dutycycle1);
-                        readcode='\0';
-                    }
-                    break;
-                    
-                    default:{
-                    }
-                    break;
+            break;
+        case APP_STATE_SERVICE_TASKS:
+        {
+            DRV_TMR1_CounterClear();
+            while (1) {
+                //if (!DRV_USART0_ReceiverBufferIsEmpty()) {
+                //    readcode = DRV_USART0_ReadByte();
+                //}
+                if(abs((int) yaw) < 20){
+                    readcode = 'U';
+                }else{
+                    readcode = 'D';
                 }
                 
-                if(!DRV_USART1_ReceiverBufferIsEmpty())
-                {
-                    readyIMU=DRV_USART1_ReadByte();
-                   arreglo[x]=readyIMU;
-                   x++;
+                switch (readcode) {
+                    case 'U':
+                    {
+                        dutycycle0 = 5000;
+                        DRV_OC0_PulseWidthSet(dutycycle0);
+                        DRV_OC1_PulseWidthSet(dutycycle0);
+                        DRV_OC2_PulseWidthSet(dutycycle0);
+                        DRV_OC3_PulseWidthSet(dutycycle0);
+                        readcode = '\0';
+                    }
+                        break;
+                    case 'D':
+                    {
+                        dutycycle0 = 0;
+                        DRV_OC0_PulseWidthSet(dutycycle0);
+                        DRV_OC1_PulseWidthSet(dutycycle0);
+                        DRV_OC2_PulseWidthSet(dutycycle0);
+                        DRV_OC3_PulseWidthSet(dutycycle0);
+                        readcode = '\0';
+                    }
+                        break;
+                    case 'L':
+                    {
+                        dutycycle0 = 5000;
+                        dutycycle1 = 0;
+                        DRV_OC0_PulseWidthSet(dutycycle0);
+                        DRV_OC1_PulseWidthSet(dutycycle0);
+                        DRV_OC2_PulseWidthSet(dutycycle1);
+                        DRV_OC3_PulseWidthSet(dutycycle1);
+                        readcode = '\0';
+                    }
+                        break;
+                    case 'R':
+                    {
+                        dutycycle0 = 5000;
+                        dutycycle1 = 0;
+                        DRV_OC0_PulseWidthSet(dutycycle1);
+                        DRV_OC1_PulseWidthSet(dutycycle1);
+                        DRV_OC2_PulseWidthSet(dutycycle0);
+                        DRV_OC3_PulseWidthSet(dutycycle0);
+                        readcode = '\0';
+                    }
+                        break;
+                    case 'A':
+                    {
+                        dutycycle0 -= 500;
+                        if (dutycycle0 < 0) {
+                            dutycycle0 = 0;
+                        }
+                        dutycycle1 = 0;
+                        DRV_OC0_PulseWidthSet(dutycycle1);
+                        DRV_OC1_PulseWidthSet(dutycycle1);
+                        DRV_OC2_PulseWidthSet(dutycycle0);
+                        DRV_OC3_PulseWidthSet(dutycycle0);
+                        readcode = '\0';
+                    }
+                        break;
+                    case 'S':
+                    {
+                        dutycycle0 -= 500;
+                        if (dutycycle0 < 0) {
+                            dutycycle0 = 0;
+                        }
+                        dutycycle1 = 0;
+                        DRV_OC0_PulseWidthSet(dutycycle0);
+                        DRV_OC1_PulseWidthSet(dutycycle0);
+                        DRV_OC2_PulseWidthSet(dutycycle1);
+                        DRV_OC3_PulseWidthSet(dutycycle1);
+                        readcode = '\0';
+                    }
+                        break;
+                    case 'B':
+                    {
+                        dutycycle0 += 500;
+                        if (dutycycle0 > 5000) {
+                            dutycycle0 = 5000;
+                        }
+                        dutycycle1 = 0;
+                        DRV_OC0_PulseWidthSet(dutycycle1);
+                        DRV_OC1_PulseWidthSet(dutycycle1);
+                        DRV_OC2_PulseWidthSet(dutycycle0);
+                        DRV_OC3_PulseWidthSet(dutycycle0);
+                        readcode = '\0';
+                    }
+                        break;
+                    case 'C':
+                    {
+                        dutycycle0 += 500;
+                        if (dutycycle0 > 5000) {
+                            dutycycle0 = 5000;
+                        }
+                        dutycycle1 = 0;
+                        DRV_OC0_PulseWidthSet(dutycycle0);
+                        DRV_OC1_PulseWidthSet(dutycycle0);
+                        DRV_OC2_PulseWidthSet(dutycycle1);
+                        DRV_OC3_PulseWidthSet(dutycycle1);
+                        readcode = '\0';
+                    }
+                        break;
 
-                   if(readyIMU == '\n')
-                   {
-                   result = sscanf(arreglo + 1, "%f %f %f", &yaw, &pitch, &roll);
-            
-                   
-                   x = 0;
-                   unsigned char buffer1[10] = {'\0'};
-                   unsigned char buffer2[10] = {'\0'};
-                   unsigned char buffer3[10] = {'\0'};
-                   int ret = snprintf(buffer1, sizeof buffer1, "%f", yaw);
-                       ret = snprintf(buffer2, sizeof buffer2, "%f", pitch);
-                       ret = snprintf(buffer3, sizeof buffer3, "%f", roll);
-                   
-                       for(i = 0; i<10 ; i++)
-                       {
-                            DRV_USART0_WriteByte(buffer1[i]);
-                       }
-                       DRV_USART0_WriteByte(' '); 
-                               
-                       for(i = 0; i<10 ; i++)
-                       {
-                            DRV_USART0_WriteByte(buffer2[i]);
-                       }
-                       
-                       DRV_USART0_WriteByte(' ');
-                       
-                       for(i = 0; i<10 ; i++)
-                       {
-                            DRV_USART0_WriteByte(buffer3[i]);
-                       }                       
-                       
-                       DRV_USART0_WriteByte('\n');
-                       memset(arreglo,0,sizeof arreglo);
-                       memset(buffer,0,sizeof buffer);
-                   }
-                   
-                   //DRV_USART0_WriteByte(yaw);
-                 
+                    default:
+                    {
+                    }
+                        break;
                 }
-                switch (readyIMU){
-                    case 'k' :{
+
+                if (!DRV_USART1_ReceiverBufferIsEmpty()) {
+                    readyIMU = DRV_USART1_ReadByte();
+                    arreglo[x] = readyIMU;
+                    x++;
+
+                    if (readyIMU == '\n') {
+                        result = sscanf(arreglo + 1, "%f %f %f", &yaw, &pitch, &roll);
                         
+                        x = 0;
+                        unsigned char buffer1[10] = {'\0'};
+                        unsigned char buffer2[10] = {'\0'};
+                        unsigned char buffer3[10] = {'\0'};
+                        int ret = snprintf(buffer1, sizeof buffer1, "%f", yaw);
+                        ret = snprintf(buffer2, sizeof buffer2, "%f", pitch);
+                        ret = snprintf(buffer3, sizeof buffer3, "%f", roll);
+
+                        for (i = 0; i < 10; i++) {
+                            DRV_USART0_WriteByte(buffer1[i]);
+                        }
+                        DRV_USART0_WriteByte(' ');
+
+                        for (i = 0; i < 10; i++) {
+                            DRV_USART0_WriteByte(buffer2[i]);
+                        }
+
+                        DRV_USART0_WriteByte(' ');
+
+                        for (i = 0; i < 10; i++) {
+                            DRV_USART0_WriteByte(buffer3[i]);
+                        }
+
+                        DRV_USART0_WriteByte('\n');
+                        memset(arreglo, 0, sizeof arreglo);
+                        memset(buffer, 0, sizeof buffer);
                     }
-                    break;
-                    default:{
-                        
+
+                    //DRV_USART0_WriteByte(yaw);
+
+                }
+                switch (readyIMU) {
+                    case 'k':
+                    {
+
                     }
-                    break;
+                        break;
+                    default:
+                    {
+
+                    }
+                        break;
                 }
                 /*while (DRV_TMR0_CounterValueGet() < 10000){
                 }
@@ -219,15 +228,16 @@ void APP_Tasks ( void ){
                 PORTAbits.RA2 = 0b0;*/
             }
         }
-        break;
+            break;
 
-        /* TODO: implement your application state machine.*/
-        
+            /* TODO: implement your application state machine.*/
 
-        /* The default state should never be executed. */
-        default:{
+
+            /* The default state should never be executed. */
+        default:
+        {
             /* TODO: Handle error in application's state machine. */
         }
-        break;
+            break;
     }
 }
