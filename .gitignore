@@ -52,3 +52,11 @@ Mkfile.old
 dkms.conf
 /MicroDron/firmware/MicroDron.X/dist/
 /MicroDron/firmware/MicroDron.X/build/
+
+MicroDron/firmware/src/system_config/default/configuration.xml
+MicroDron/firmware/MicroDron.X/nbproject/project.xml
+MicroDron/firmware/MicroDron.X/nbproject/private/private.xml
+MicroDron/firmware/MicroDron.X/nbproject/configurations.xml
+MicroDron/firmware/MicroDron.X/nbproject/Makefile-genesis.properties
+MicroDron/firmware/MicroDron.X/nbproject/Makefile-default.mk
+
