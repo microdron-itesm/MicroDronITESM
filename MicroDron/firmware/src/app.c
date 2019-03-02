@@ -11,7 +11,7 @@ int dutycycle0 = 2000;
 int dutycycle1 = 2000;
 int dutycycle2 = 2000;
 int dutycycle3 = 2000;
-float yaw, roll, pitch; //en verdad es float
+float yaw, roll, pitch, thrust; //en verdad es float
 int result = 0;
 int x = 0;
 int i;
@@ -173,15 +173,17 @@ void APP_Tasks(void) {
                     x++;
 
                     if (readyIMU == '\n') {
-                        result = sscanf(arreglo + 1, "%f %f %f", &yaw, &pitch, &roll);
+                        result = sscanf(arreglo + 1, "%f %f %f", &yaw, &pitch, &roll, &thrust);
                         
                         x = 0;
                         unsigned char buffer1[10] = {'\0'};
                         unsigned char buffer2[10] = {'\0'};
                         unsigned char buffer3[10] = {'\0'};
+                        unsigned char buffer4[10] = {'\0'};
                         int ret = snprintf(buffer1, sizeof buffer1, "%f", yaw);
                         ret = snprintf(buffer2, sizeof buffer2, "%f", pitch);
                         ret = snprintf(buffer3, sizeof buffer3, "%f", roll);
+                        ret = snprintf(buffer4, sizeof buffer3, "%f", thrust);
 
                         for (i = 0; i < 10; i++) {
                             DRV_USART0_WriteByte(buffer1[i]);
@@ -197,7 +199,10 @@ void APP_Tasks(void) {
                         for (i = 0; i < 10; i++) {
                             DRV_USART0_WriteByte(buffer3[i]);
                         }
-
+                        
+                        for (i = 0; i < 10; i++) {
+                            DRV_USART0_WriteByte(buffer4[i]);
+                        }
                         DRV_USART0_WriteByte('\n');
                         memset(arreglo, 0, sizeof arreglo);
                         memset(buffer, 0, sizeof buffer);
