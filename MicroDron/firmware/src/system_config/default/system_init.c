@@ -48,8 +48,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "system_config.h"
 #include "system_definitions.h"
-
-
+#include "imu_msg_handler.h"
+#include "wifi_msg_sender.h"
 // ****************************************************************************
 // ****************************************************************************
 // Section: Configuration Bits
@@ -183,6 +183,8 @@ void SYS_Initialize ( void* data )
     SYS_PORTS_Initialize();
 
     /* Initialize Middleware */
+    IMU_MSG_HANDLER_INITIALIZE();
+    WIFI_MSG_SENDER_INITIALIZE();
 
     /* Initialize the Application */
     APP_Initialize();
