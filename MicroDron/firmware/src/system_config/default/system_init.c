@@ -185,6 +185,7 @@ void SYS_Initialize ( void* data )
     /* Initialize Middleware */
     IMU_MSG_HANDLER_INITIALIZE();
     WIFI_MSG_SENDER_INITIALIZE();
+    DRONE_MSG_HANDLER_INITIALIZE();
 
     /* Initialize the Application */
     APP_Initialize();

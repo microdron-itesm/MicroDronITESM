@@ -91,6 +91,7 @@ void SYS_Tasks ( void )
     /* Maintain Middleware & Other Libraries */
     IMU_MSG_HANDLER_UPDATE();
     WIFI_MSG_SENDER_UPDATE();
+    DRONE_MSG_HANDLER_UPDATE();
 
     /* Maintain the application's state machine. */
     APP_Tasks();

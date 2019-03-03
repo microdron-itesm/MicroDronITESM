@@ -4,13 +4,13 @@ unsigned char IMU_MESSAGE[50] = {'\0'};
 const unsigned short int  IMU_MESSAGE_MAX_SIZE = 50;
 unsigned short int IMU_MESSAGE_INDEX = 0;
 IMU_POSE IMU_LAST_POSE;
-IMU_MSG_HANDLER_STATE HANDLER_STATE;
+IMU_MSG_HANDLER_STATE IMU_MSG_CURRENT_STATE;
 bool NEW_POSE_AVAILABLE = false;
 /**
  * Initializes everything that is needed to receive messages from IMU
  */
 void IMU_MSG_HANDLER_INITIALIZE(){  
-    HANDLER_STATE = IMU_MSG_HANDLER_STATE_INIT;
+    IMU_MSG_CURRENT_STATE = IMU_MSG_HANDLER_STATE_INIT;
     IMU_LAST_POSE.height = 0;
     IMU_LAST_POSE.pitch = 0;
     IMU_LAST_POSE.roll = 0;
@@ -21,27 +21,27 @@ void IMU_MSG_HANDLER_INITIALIZE(){
  * Updates IMU MESSAGE HANDLER's state machine
  */
 void IMU_MSG_HANDLER_UPDATE(){
-    switch(HANDLER_STATE){
+    switch(IMU_MSG_CURRENT_STATE){
         case IMU_MSG_HANDLER_STATE_INIT:
         {
-            HANDLER_STATE = IMU_MSG_HANDLER_STATE_MESSAGE_START;
+            IMU_MSG_CURRENT_STATE = IMU_MSG_HANDLER_STATE_MSG_START;
             break;
         }
         
-	case IMU_MSG_HANDLER_STATE_MESSAGE_START:
+	case IMU_MSG_HANDLER_STATE_MSG_START:
         {
             NEW_POSE_AVAILABLE = false;
             if(!DRV_USART1_ReceiverBufferIsEmpty()){
                 bool NEW_IMU_MESSAGE = DRV_USART1_ReadByte() == ',';           
 
                 if(NEW_IMU_MESSAGE){
-                    HANDLER_STATE = IMU_MSG_HANDLER_STATE_MESSAGE_RECEIVE;
+                    IMU_MSG_CURRENT_STATE = IMU_MSG_HANDLER_STATE_MSG_RECEIVE;
                 }
             }
             break;
         }
         
-	case IMU_MSG_HANDLER_STATE_MESSAGE_RECEIVE:
+	case IMU_MSG_HANDLER_STATE_MSG_RECEIVE:
         {
             if(!DRV_USART1_ReceiverBufferIsEmpty()){
                 unsigned char newByte = DRV_USART1_ReadByte();
@@ -55,7 +55,7 @@ void IMU_MSG_HANDLER_UPDATE(){
                     
                     memset(IMU_MESSAGE, 0, sizeof IMU_MESSAGE);
                     IMU_MESSAGE_INDEX = 0;
-                    HANDLER_STATE = IMU_MSG_HANDLER_STATE_MESSAGE_START;
+                    IMU_MSG_CURRENT_STATE = IMU_MSG_HANDLER_STATE_MSG_START;
                 }
             }
             break;
@@ -71,7 +71,7 @@ void IMU_MSG_HANDLER_UPDATE(){
  * Get last valid IMU_POSE from HANDLER
  * @return IMU_POSE
  */
-IMU_POSE IMU_MSG_HANDLER_GET_LAST_POSE(){
+IMU_POSE IMU_MSG_HANDLER_LAST_POSE(){
     return IMU_LAST_POSE;
 }
 

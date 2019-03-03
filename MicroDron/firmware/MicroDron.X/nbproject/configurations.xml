@@ -38,6 +38,7 @@
         <itemPath>../src/app.h</itemPath>
         <itemPath>../src/imu_msg_handler.h</itemPath>
         <itemPath>../src/wifi_msg_sender.h</itemPath>
+        <itemPath>../src/drone_msg_handler.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="driver" projectFiles="true">
@@ -162,6 +163,7 @@
         <itemPath>../src/main.c</itemPath>
         <itemPath>../src/imu_msg_handler.c</itemPath>
         <itemPath>../src/wifi_msg_sender.c</itemPath>
+        <itemPath>../src/drone_msg_handler.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"

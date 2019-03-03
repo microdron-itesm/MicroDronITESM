@@ -20,8 +20,8 @@ typedef struct {
 
 typedef enum {
 	IMU_MSG_HANDLER_STATE_INIT,
-	IMU_MSG_HANDLER_STATE_MESSAGE_START,
-	IMU_MSG_HANDLER_STATE_MESSAGE_RECEIVE
+	IMU_MSG_HANDLER_STATE_MSG_START,
+	IMU_MSG_HANDLER_STATE_MSG_RECEIVE
 } IMU_MSG_HANDLER_STATE;
 /**
  * Initializes everything that is needed to receive messages from IMU
@@ -37,7 +37,7 @@ void IMU_MSG_HANDLER_UPDATE();
  * Get last valid IMU_POSE from HANDLER
  * @return IMU_POSE
  */
-IMU_POSE IMU_MSG_HANDLER_GET_LAST_POSE();
+IMU_POSE IMU_MSG_HANDLER_LAST_POSE();
 
 /**
  * Get whether there is a new IMU pose available
