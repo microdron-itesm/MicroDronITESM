@@ -110,10 +110,11 @@ void APP_UpdateState(){
     if(WIFI_MSG_SENDER_LAST_MSG_SENT()){
         unsigned char msgBuffer[50] = {'\0'};
 
-        int ret = snprintf(msgBuffer, sizeof msgBuffer, "Y:%f P:%f R:%f H:%f\n", 
-                dronePose.yaw, dronePose.pitch, dronePose.roll, dronePose.height);
+        int ret = snprintf(msgBuffer, sizeof msgBuffer, "T:%d Y:%.2f P:%.2f R:%.2f H:%.2f\n", 
+                DRV_TMR0_CounterValueGet(), dronePose.yaw, dronePose.pitch,
+                    dronePose.roll, dronePose.height);
 
-
+        
         WIFI_MSG_SENDER_SEND_MSG(msgBuffer, strlen(msgBuffer) + 1);
     }
 
