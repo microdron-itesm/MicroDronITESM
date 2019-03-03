@@ -72,12 +72,12 @@ void APP_Tasks(void) {
         case APP_STATE_SERVICE_TASKS:
         {
             switch(LAST_DRONE_MSG){
-                DRONE_MSG_TYPE_UPDATE_SETPOINTS:
+                case DRONE_MSG_TYPE_UPDATE_SETPOINTS:
                 {
                     break;
                 }
 
-                DRONE_MSG_TYPE_MANUAL_CONTROL:
+                case DRONE_MSG_TYPE_MANUAL_CONTROL:
                 {
                     DRV_OC0_PulseWidthSet(LAST_MANUAL_CONTROL.bottomLeftMotor);
                     DRV_OC1_PulseWidthSet(LAST_MANUAL_CONTROL.bottomRightMotor);
@@ -122,13 +122,13 @@ void APP_UpdateState(){
         LAST_DRONE_MSG = DRONE_MSG_HANDLER_LAST_MSG_TYPE();
 
         switch(LAST_DRONE_MSG){
-            DRONE_MSG_TYPE_UPDATE_SETPOINTS:
+            case DRONE_MSG_TYPE_UPDATE_SETPOINTS:
             {
                 LAST_UPDATE_SETPOINT = DRONE_MSG_HANDLER_DATA_UPDATE_SETPOINTS();
                 break;
             }
 
-            DRONE_MSG_TYPE_MANUAL_CONTROL:
+            case DRONE_MSG_TYPE_MANUAL_CONTROL:
             {
                 LAST_MANUAL_CONTROL = DRONE_MSG_HANDLER_DATA_MANUAL_CONTROL();
                 break;
