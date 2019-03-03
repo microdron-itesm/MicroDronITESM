@@ -41,7 +41,18 @@ void APP_Initialize(void) {
     dronePose.pitch = 0.0;
     dronePose.roll = 0.0;
     dronePose.yaw = 0.0;
-        
+    LAST_UPDATE_SETPOINT.height = 0;
+    LAST_UPDATE_SETPOINT.pitch = 0;
+    LAST_UPDATE_SETPOINT.roll = 0;
+    LAST_UPDATE_SETPOINT.yaw = 0;
+    
+    LAST_MANUAL_CONTROL.bottomLeftMotor = 0;
+    LAST_MANUAL_CONTROL.bottomRightMotor = 0;
+    LAST_MANUAL_CONTROL.topLeftMotor = 0;
+    LAST_MANUAL_CONTROL.topRightMotor = 0;
+    
+    LAST_DRONE_MSG = DRONE_MSG_TYPE_NONE;
+    
     DRV_OC0_Start();
     DRV_OC1_Start();
     DRV_OC2_Start();
