@@ -85,7 +85,15 @@ void APP_Tasks(void) {
                     DRV_OC3_PulseWidthSet(LAST_MANUAL_CONTROL.topLeftMotor);
 
                     break;
-                }            
+                }
+                case DRONE_MSG_TYPE_KILL_MOTORS:
+                {
+                    DRV_OC0_PulseWidthSet(0);
+                    DRV_OC1_PulseWidthSet(0);
+                    DRV_OC2_PulseWidthSet(0);
+                    DRV_OC3_PulseWidthSet(0);
+                    break;
+                }
                 default:
                 {
                     break;

@@ -77,6 +77,7 @@ void DRONE_MSG_HANDLER_UPDATE(){
                             case 'K':
                             {
                                 LAST_MSG_TYPE = DRONE_MSG_TYPE_KILL_MOTORS;
+                                break;
                             }
                             
                             default:
