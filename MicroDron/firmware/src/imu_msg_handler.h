@@ -6,17 +6,13 @@
 
 #include "system_config.h"
 #include "system_definitions.h"
+#include "drone_control/drone_pose.h"
 
 /**
  *Simple serial comms handler to obtain IMU data
  * 
  */
-typedef struct {
-	float yaw;
-	float pitch;
-	float roll;
-	float height;
-} IMU_POSE;
+
 
 typedef enum {
 	IMU_MSG_HANDLER_STATE_INIT,
@@ -37,7 +33,7 @@ void IMU_MSG_HANDLER_UPDATE();
  * Get last valid IMU_POSE from HANDLER
  * @return IMU_POSE
  */
-IMU_POSE IMU_MSG_HANDLER_LAST_POSE();
+DRONE_POSE IMU_MSG_HANDLER_LAST_POSE();
 
 /**
  * Get whether there is a new IMU pose available

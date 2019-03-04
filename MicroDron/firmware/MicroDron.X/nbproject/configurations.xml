@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="65">
   <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="drone_control"
+                   displayName="drone_control"
+                   projectFiles="true">
+      <logicalFolder name="PID" displayName="PID" projectFiles="true">
+        <itemPath>../src/drone_control/PID/yaw_pid.c</itemPath>
+        <itemPath>../src/drone_control/PID/height_pid.c</itemPath>
+        <itemPath>../src/drone_control/PID/pitch_pid.c</itemPath>
+        <itemPath>../src/drone_control/PID/base_pid.c</itemPath>
+        <itemPath>../src/drone_control/PID/roll_pid.c</itemPath>
+      </logicalFolder>
+      <itemPath>../src/drone_control/drone_control.c</itemPath>
+      <itemPath>../src/drone_control/drone_control.h</itemPath>
+      <itemPath>../src/drone_control/drone_pose.h</itemPath>
+      <itemPath>../src/drone_control/PID/base_pid.h</itemPath>
+      <itemPath>../src/drone_control/PID/height_pid.h</itemPath>
+      <itemPath>../src/drone_control/PID/pitch_pid.h</itemPath>
+      <itemPath>../src/drone_control/PID/roll_pid.h</itemPath>
+      <itemPath>../src/drone_control/PID/yaw_pid.h</itemPath>
+      <itemPath>../src/drone_motor_output.h</itemPath>
+    </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">

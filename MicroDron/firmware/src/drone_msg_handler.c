@@ -9,7 +9,7 @@ unsigned short int DRONE_MSG_INDEX = 0;
 unsigned short int DRONE_MSG_MAX_SIZE = 50;
 
 DRONE_MSG_DATA_UPDATE_SETPOINTS LAST_DATA_UPDATE_SETPOINTS;
-DRONE_MSG_DATA_MANUAL_CONTROL LAST_DATA_MANUAL_CONTROL;
+DRONE_CTRL_MOTOR_OUTPUT LAST_DATA_MANUAL_CONTROL;
 
 bool NEW_DRONE_MESSAGE = false;
 
@@ -67,10 +67,10 @@ void DRONE_MSG_HANDLER_UPDATE(){
                             case 'M':
                             {
                                 LAST_MSG_TYPE = DRONE_MSG_TYPE_MANUAL_CONTROL;
-                                LAST_DATA_MANUAL_CONTROL.bottomLeftMotor = firstValue;
-                                LAST_DATA_MANUAL_CONTROL.bottomRightMotor = secondValue;
-                                LAST_DATA_MANUAL_CONTROL.topLeftMotor = thirdValue;
-                                LAST_DATA_MANUAL_CONTROL.topRightMotor = fourthValue;
+                                LAST_DATA_MANUAL_CONTROL.bottomLeft = firstValue;
+                                LAST_DATA_MANUAL_CONTROL.bottomRight = secondValue;
+                                LAST_DATA_MANUAL_CONTROL.topLeft = thirdValue;
+                                LAST_DATA_MANUAL_CONTROL.topRight = fourthValue;
                                 break;
                             }
                             
@@ -108,7 +108,7 @@ DRONE_MSG_DATA_UPDATE_SETPOINTS DRONE_MSG_HANDLER_DATA_UPDATE_SETPOINTS(){
     return LAST_DATA_UPDATE_SETPOINTS;
 }
 
-DRONE_MSG_DATA_MANUAL_CONTROL DRONE_MSG_HANDLER_DATA_MANUAL_CONTROL(){
+DRONE_CTRL_MOTOR_OUTPUT DRONE_MSG_HANDLER_DATA_MANUAL_CONTROL(){
     return LAST_DATA_MANUAL_CONTROL;
 }
 

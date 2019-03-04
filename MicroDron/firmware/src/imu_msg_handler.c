@@ -3,7 +3,7 @@
 unsigned char IMU_MESSAGE[50] = {'\0'};
 const unsigned short int  IMU_MESSAGE_MAX_SIZE = 50;
 unsigned short int IMU_MESSAGE_INDEX = 0;
-IMU_POSE IMU_LAST_POSE;
+DRONE_POSE IMU_LAST_POSE;
 IMU_MSG_HANDLER_STATE IMU_MSG_CURRENT_STATE;
 bool NEW_POSE_AVAILABLE = false;
 /**
@@ -71,7 +71,7 @@ void IMU_MSG_HANDLER_UPDATE(){
  * Get last valid IMU_POSE from HANDLER
  * @return IMU_POSE
  */
-IMU_POSE IMU_MSG_HANDLER_LAST_POSE(){
+DRONE_POSE IMU_MSG_HANDLER_LAST_POSE(){
     return IMU_LAST_POSE;
 }
 

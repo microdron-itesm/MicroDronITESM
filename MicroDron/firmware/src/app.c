@@ -25,14 +25,16 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 
 #include "app.h"
+#include "imu_msg_handler.h"
 #include "wifi_msg_sender.h"
 #include "drone_msg_handler.h"
+#include "drone_control/drone_control.h"
 
 APP_DATA appData;
-IMU_POSE dronePose;
+DRONE_POSE dronePose;
 DRONE_MSG_TYPE LAST_DRONE_MSG;
 DRONE_MSG_DATA_UPDATE_SETPOINTS LAST_UPDATE_SETPOINT;
-DRONE_MSG_DATA_MANUAL_CONTROL LAST_MANUAL_CONTROL;
+DRONE_CTRL_MOTOR_OUTPUT LAST_MANUAL_CONTROL;
 
 void APP_UpdateState(void);
 
@@ -46,10 +48,10 @@ void APP_Initialize(void) {
     LAST_UPDATE_SETPOINT.roll = 0;
     LAST_UPDATE_SETPOINT.yaw = 0;
     
-    LAST_MANUAL_CONTROL.bottomLeftMotor = 0;
-    LAST_MANUAL_CONTROL.bottomRightMotor = 0;
-    LAST_MANUAL_CONTROL.topLeftMotor = 0;
-    LAST_MANUAL_CONTROL.topRightMotor = 0;
+    LAST_MANUAL_CONTROL.bottomLeft = 0;
+    LAST_MANUAL_CONTROL.bottomRight = 0;
+    LAST_MANUAL_CONTROL.topLeft = 0;
+    LAST_MANUAL_CONTROL.topRight = 0;
     
     LAST_DRONE_MSG = DRONE_MSG_TYPE_NONE;
     
@@ -63,12 +65,11 @@ void APP_Initialize(void) {
     DRV_TMR1_Start();
 
     appData.state = APP_STATE_INIT;
-
+    DRONE_CTRL_INITIALIZE();
+    
 }
 
 void APP_Tasks(void) {
-    DRV_TMR0_CounterValueGet();
-
     APP_UpdateState();
     
     /* Check the application's current state. */
@@ -84,16 +85,27 @@ void APP_Tasks(void) {
         {
             switch(LAST_DRONE_MSG){
                 case DRONE_MSG_TYPE_UPDATE_SETPOINTS:
-                {
+                {   
+                    DRONE_CTRL_SET_TARGET_HEIGHT(LAST_UPDATE_SETPOINT.height);
+                    DRONE_CTRL_SET_TARGET_PITCH(LAST_UPDATE_SETPOINT.pitch);
+                    DRONE_CTRL_SET_TARGET_ROLL(LAST_UPDATE_SETPOINT.roll);
+                    DRONE_CTRL_SET_TARGET_YAW(LAST_UPDATE_SETPOINT.yaw);
+                    
+                    DRONE_CTRL_MOTOR_OUTPUT motorOutput = DRONE_CTRL_GET_MOTOR_OUTPUT();
+                    DRV_OC0_PulseWidthSet(motorOutput.bottomLeft);
+                    DRV_OC1_PulseWidthSet(motorOutput.bottomRight);
+                    DRV_OC2_PulseWidthSet(motorOutput.topRight);
+                    DRV_OC3_PulseWidthSet(motorOutput.topLeft);
+                    
                     break;
                 }
 
                 case DRONE_MSG_TYPE_MANUAL_CONTROL:
                 {
-                    DRV_OC0_PulseWidthSet(LAST_MANUAL_CONTROL.bottomLeftMotor);
-                    DRV_OC1_PulseWidthSet(LAST_MANUAL_CONTROL.bottomRightMotor);
-                    DRV_OC2_PulseWidthSet(LAST_MANUAL_CONTROL.topRightMotor);
-                    DRV_OC3_PulseWidthSet(LAST_MANUAL_CONTROL.topLeftMotor);
+                    DRV_OC0_PulseWidthSet(LAST_MANUAL_CONTROL.bottomLeft);
+                    DRV_OC1_PulseWidthSet(LAST_MANUAL_CONTROL.bottomRight);
+                    DRV_OC2_PulseWidthSet(LAST_MANUAL_CONTROL.topRight);
+                    DRV_OC3_PulseWidthSet(LAST_MANUAL_CONTROL.topLeft);
 
                     break;
                 }
@@ -124,6 +136,7 @@ void APP_Tasks(void) {
 void APP_UpdateState(){
     if(IMU_MSG_HANDLER_NEW_POSE_AVAILABLE()){
         dronePose = IMU_MSG_HANDLER_LAST_POSE();
+        DRONE_CTRL_UPDATE(dronePose);
     }
 
     if(WIFI_MSG_SENDER_LAST_MSG_SENT()){

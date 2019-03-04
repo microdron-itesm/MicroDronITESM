@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
+#include "drone_control/drone_motor_output.h"
 
 typedef enum {
 	DRONE_MSG_HANDLER_STATE_MSG_START,
@@ -24,12 +25,6 @@ typedef struct {
 	float height;	
 } DRONE_MSG_DATA_UPDATE_SETPOINTS;
 
-typedef struct {
-	float bottomLeftMotor;
-	float bottomRightMotor;
-	float topLeftMotor;
-	float topRightMotor;	
-} DRONE_MSG_DATA_MANUAL_CONTROL;
 
 void DRONE_MSG_HANDLER_INITIALIZE();
 
@@ -39,7 +34,7 @@ DRONE_MSG_TYPE DRONE_MSG_HANDLER_LAST_MSG_TYPE();
 
 DRONE_MSG_DATA_UPDATE_SETPOINTS DRONE_MSG_HANDLER_DATA_UPDATE_SETPOINTS();
 
-DRONE_MSG_DATA_MANUAL_CONTROL DRONE_MSG_HANDLER_DATA_MANUAL_CONTROL();
+DRONE_CTRL_MOTOR_OUTPUT DRONE_MSG_HANDLER_DATA_MANUAL_CONTROL();
 
 bool DRONE_MSG_HANDLER_NEW_MSG_AVAILABLE();
 
