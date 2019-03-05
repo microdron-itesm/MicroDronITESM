@@ -28,7 +28,7 @@ void WIFI_MSG_SENDER_UPDATE(){
         }
         case WIFI_MSG_SENDER_STATE_SEND:
         {   
-            if(CURRENT_MSG_INDEX < CURRENT_MSG_SIZE){
+            if(CURRENT_MSG_INDEX < CURRENT_MSG_SIZE && !DRV_USART0_TransmitBufferIsFull()){
                 DRV_USART0_WriteByte(CURRENT_MESSAGE[CURRENT_MSG_INDEX++]);
             }else{
                 SENDER_STATE = WIFI_MSG_SENDER_STATE_WAIT;

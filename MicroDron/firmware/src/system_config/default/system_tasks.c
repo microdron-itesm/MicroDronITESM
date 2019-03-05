@@ -56,7 +56,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "imu_msg_handler.h"
 #include "wifi_msg_sender.h"
 
-
 // *****************************************************************************
 // *****************************************************************************
 // Section: System "Tasks" Routine
@@ -92,7 +91,7 @@ void SYS_Tasks ( void )
     IMU_MSG_HANDLER_UPDATE();
     WIFI_MSG_SENDER_UPDATE();
     DRONE_MSG_HANDLER_UPDATE();
-
+    
     /* Maintain the application's state machine. */
     APP_Tasks();
 }

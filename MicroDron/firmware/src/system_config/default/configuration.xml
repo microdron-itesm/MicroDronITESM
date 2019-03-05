@@ -195,6 +195,7 @@
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">4435CB383D8997D9EC73BF640FB9D74C</Checksum>
+        <ProjectFileChecksum dnOrder="3">98B5E5983E1C1B7C13E2365D9772D8D0</ProjectFileChecksum>
       </Template>
       <Template dnOrder="13">
         <Name dnOrder="0">drv_oc_static.h</Name>
@@ -243,6 +244,7 @@
         <Name dnOrder="0">system_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">5B83189FD008932A24332C76F45B8484</Checksum>
+        <ProjectFileChecksum dnOrder="3">9C9DBAA6A7A22D48CBEA7ECA9B442511</ProjectFileChecksum>
       </Template>
       <Template dnOrder="23">
         <Name dnOrder="0">system_config.h</Name>
@@ -271,11 +273,11 @@
     </Templates>
     <CompilerItems dnOrder="2">
       <C32 dnOrder="0">
-        <Include dnOrder="0" value="/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src"/>
-        <Include dnOrder="1" value="/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/system_config/default"/>
-        <Include dnOrder="2" value="/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/default"/>
-        <Include dnOrder="3" value="/home/rodrigovqz/microchip/harmony/v2_06/framework"/>
-        <Include dnOrder="4" value="/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/system_config/default/framework"/>
+        <Include dnOrder="0" value="/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src"/>
+        <Include dnOrder="1" value="/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/system_config/default"/>
+        <Include dnOrder="2" value="/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/default"/>
+        <Include dnOrder="3" value="/home/alberto/microchip/harmony/v2_06/framework"/>
+        <Include dnOrder="4" value="/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/system_config/default/framework"/>
       </C32>
     </CompilerItems>
     <Libraries dnOrder="3">

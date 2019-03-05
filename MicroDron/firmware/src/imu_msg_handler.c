@@ -51,6 +51,7 @@ void IMU_MSG_HANDLER_UPDATE(){
                     int ret = sscanf(IMU_MESSAGE, "%f %f %f %f",
                             &IMU_LAST_POSE.yaw, &IMU_LAST_POSE.pitch, &IMU_LAST_POSE.roll, &IMU_LAST_POSE.height);
                     
+                    IMU_LAST_POSE.pitch *= -1;
                     NEW_POSE_AVAILABLE = ret == 4;
                     
                     memset(IMU_MESSAGE, 0, sizeof IMU_MESSAGE);
