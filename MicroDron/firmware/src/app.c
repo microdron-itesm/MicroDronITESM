@@ -65,8 +65,6 @@ void APP_Initialize(void) {
 
     appData.state = APP_STATE_INIT;
     DRONE_CTRL_INITIALIZE();
-    DRONE_CTRL_USE_MANUAL_THRUST(true);
-    DRONE_CTRL_SET_MANUAL_THRUST(0.5);
     
 }
 
