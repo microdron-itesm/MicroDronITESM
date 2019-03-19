@@ -1,3 +1,6 @@
+
+#include <Keyboard.h>
+
 /************************************************************
   MPU9250_DMP_Quaternion
   Quaternion example for MPU-9250 DMP Arduino Library
@@ -29,7 +32,15 @@
 
 MPU9250_DMP imu;
 MPL3115A2 altimeter;
-double errorEstimate = 100.0;
+double errorEstimate = .001;
+float a0 = 0;
+float a1 = 0;
+float v0 = 0;
+float v1 = 0;
+float p0 = 0;
+float p1 = 0;
+float time0 = millis() / 1000.0;
+float time1 = time0;
 
 SimpleKalmanFilter pressureKalmanFilter( errorEstimate, errorEstimate, 0.01);
 
@@ -119,13 +130,34 @@ double roll = imu.roll + 180;
   } 
 
   double altitude = altimeter.readAltitude() * 1000 - 490000;
-  float estimated_altitude = pressureKalmanFilter.updateEstimate(altitude);
+  double pressure = altimeter.readPressure() * 0.01;
 
-  SerialPort.print(yaw);
-  SerialPort.print(" ");
-  SerialPort.print(pitch);
-  SerialPort.print(" ");
-  SerialPort.println(roll);
+  //double altitude2 = (pressure - 0.3) * powf((1 + (.00008422880686 * (altimeter.readAltitude() / powf((pressure - .3), 0.190284)))),5.2553026);
+
+  float a1 = imu.calcAccel(imu.gz);
+  float a2 = imu.calcAccel(imu.gx);
+  float a3 = imu.calcAccel(imu.gy);
+  float estimated_altitude = pressureKalmanFilter.updateEstimate(a2);
+
+  
+  time1 = millis()/10;
+  
+  v1 = v0 + (a2 * (time1-time0) );
+  p1 = p0 + (v1 * (time1-time0));
+
+  //SerialPort.print(yaw);
+  //SerialPort.print(" ");
+  SerialPort.println(v1);
+ // SerialPort.print(" ");
+  //SerialPort.print(roll);
+  //SerialPort.println(p1);
+  //SerialPort.print(" ");
+
+
+  time0 = time1;
+  a0 = a1;
+  v0 = v1;
+  p0 = p1;
 
   Serial1.print(","); 
   Serial1.print(yaw);
@@ -137,4 +169,3 @@ double roll = imu.roll + 180;
   Serial1.println(estimated_altitude);
 
 }
-

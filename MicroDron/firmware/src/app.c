@@ -48,10 +48,10 @@ void APP_Initialize(void) {
     LAST_UPDATE_SETPOINT.roll = 0;
     LAST_UPDATE_SETPOINT.yaw = 0;
     
-    CURRENT_MOTOR_OUTPUT.bottomLeft = 0;
-    CURRENT_MOTOR_OUTPUT.bottomRight = 0;
-    CURRENT_MOTOR_OUTPUT.topLeft = 0;
-    CURRENT_MOTOR_OUTPUT.topRight = 0;
+    CURRENT_MOTOR_OUTPUT.bottom = 0;
+    CURRENT_MOTOR_OUTPUT.midRight = 0;
+    CURRENT_MOTOR_OUTPUT.midLeft = 0;
+    CURRENT_MOTOR_OUTPUT.top = 0;
     
     LAST_DRONE_MSG = DRONE_MSG_TYPE_KILL_MOTORS;
     
@@ -91,10 +91,10 @@ void APP_Tasks(void) {
                 }
                 case DRONE_MSG_TYPE_MANUAL_CONTROL:
                 {
-                    DRV_OC0_PulseWidthSet((uint32_t) CURRENT_MOTOR_OUTPUT.topLeft);
-                    DRV_OC1_PulseWidthSet((uint32_t)  CURRENT_MOTOR_OUTPUT.topRight);
-                    DRV_OC2_PulseWidthSet((uint32_t) CURRENT_MOTOR_OUTPUT.bottomLeft);
-                    DRV_OC3_PulseWidthSet((uint32_t) CURRENT_MOTOR_OUTPUT.bottomRight);
+                    DRV_OC0_PulseWidthSet((uint32_t) CURRENT_MOTOR_OUTPUT.bottom);
+                    DRV_OC1_PulseWidthSet((uint32_t) CURRENT_MOTOR_OUTPUT.midRight);
+                    DRV_OC2_PulseWidthSet((uint32_t) CURRENT_MOTOR_OUTPUT.midLeft);
+                    DRV_OC3_PulseWidthSet((uint32_t) CURRENT_MOTOR_OUTPUT.top);
                     break;
                 }
                 case DRONE_MSG_TYPE_KILL_MOTORS:
@@ -164,8 +164,8 @@ void APP_UpdateState(){
                 "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M: %.1f %.1f %.1f %.1f\r"
                 , dronePose.yaw, LAST_DRONE_MSG ,dronePose.pitch,
                     dronePose.roll, dronePose.height,
-                CURRENT_MOTOR_OUTPUT.bottomLeft, CURRENT_MOTOR_OUTPUT.bottomRight,
-                     CURRENT_MOTOR_OUTPUT.topLeft, CURRENT_MOTOR_OUTPUT.topRight);
+                CURRENT_MOTOR_OUTPUT.bottom, CURRENT_MOTOR_OUTPUT.midRight,
+                     CURRENT_MOTOR_OUTPUT.midLeft, CURRENT_MOTOR_OUTPUT.top);
         WIFI_MSG_SENDER_SEND_MSG(msgBuffer, strlen(msgBuffer) + 1);
     }
 }

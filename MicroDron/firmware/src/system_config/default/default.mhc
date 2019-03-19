@@ -6,7 +6,7 @@
 #     Harmony version: 2.06
 #
 #
-# from /home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
+# from /home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
 #
 CONFIG_APP_INSTANCES=1
 #
@@ -16,7 +16,7 @@ CONFIG_APP_MENU_IDX0=y
 CONFIG_APP_NAME_0="app"
 CONFIG_APP_AUTO_GENERATE_CODE0=n
 #
-# from /home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
+# from /home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
 #
 CONFIG_USE_EXCEPTION_HANDLER=y
 CONFIG_EXCEPTION_USE_SYS_DEBUG=y
@@ -241,7 +241,7 @@ CONFIG_DRV_TMR_CLOCK_SOURCE_3_IDX0="DRV_TMR_CLKSOURCE_INTERNAL"
 CONFIG_DRV_TMR_ALARM_FUNCS_IDX0=n
 CONFIG_DRV_TMR_PRESCALE_IDX0="TMR_PRESCALE_VALUE_1"
 CONFIG_DRV_TMR_OPERATION_MODE_IDX0="DRV_TMR_OPERATION_MODE_16_BIT"
-CONFIG_DRV_TMR_PERIOD_IDX0=5000
+CONFIG_DRV_TMR_PERIOD_IDX0=2500
 CONFIG_DRV_TMR_INST_1=y
 CONFIG_DRV_TMR_PERIPHERAL_ID_IDX1="TMR_ID_4"
 CONFIG_DRV_TMR_CLOCK_SOURCE_3_IDX1="DRV_TMR_CLKSOURCE_INTERNAL"
