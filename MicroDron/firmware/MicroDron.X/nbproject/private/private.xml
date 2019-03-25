@@ -3,19 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/drone_control/PID/base_pid.c</file>
-            <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/app.h</file>
-            <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/imu_msg_handler.c</file>
-            <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/drone_control/PID/yaw_pid.c</file>
-            <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/imu_msg_handler.h</file>
             <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/drone_msg_handler.c</file>
             <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/app.c</file>
-            <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/drone_control/PID/yaw_pid.h</file>
             <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/drone_msg_handler.h</file>
-            <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/drone_control/PID/height_pid.c</file>
-            <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/wifi_msg_sender.c</file>
-            <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/drone_control/PID/pitch_pid.c</file>
-            <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/drone_control/PID/roll_pid.c</file>
             <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/drone_control/drone_control.c</file>
             <file>file:/home/rodrigovqz/Documents/Git/MicroDronITESM/MicroDron/firmware/src/drone_control/drone_motor_output.h</file>
         </group>

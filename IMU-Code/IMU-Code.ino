@@ -63,7 +63,8 @@ void setup()
   }
   //imu.setSensors(INV_XYZ_GYRO | INV_XYZ_ACCEL); // Enable all sensors
 
-  imu.dmpBegin(DMP_FEATURE_SEND_RAW_ACCEL | // Send accelerometer data
+  imu.dmpBegin(DMP_FEATURE_SEND_RAW_ACCEL | 
+               DMP_FEATURE_SEND_RAW_ACCEL |// Send accelerometer data
                DMP_FEATURE_GYRO_CAL       | // Calibrate the gyro data
                DMP_FEATURE_SEND_CAL_GYRO  | // Send calibrated gyro data
                DMP_FEATURE_6X_LP_QUAT     , // Calculate quat's with accel/gyro
@@ -91,7 +92,7 @@ void loop()
     {
       // computeEulerAngles can be used -- after updating the
       // quaternion values -- to estimate roll, pitch, and yaw
-      imu.computeEulerAngles();
+      imu.computeEulerAnglesX();
       printIMUData();
     }
   }
@@ -103,10 +104,10 @@ void printIMUData(void)
   // are all updated.
   // Quaternion values are, by default, stored in Q30 long
   // format. calcQuat turns them into a float between -1 and 1
-  float q0 = imu.calcQuat(imu.qw);
-  float q1 = imu.calcQuat(imu.qx);
-  float q2 = imu.calcQuat(imu.qy);
-  float q3 = imu.calcQuat(imu.qz);
+  //float q0 = imu.calcGyro(imu.qw);
+  float q1 = imu.calcGyro(imu.gx);
+  float q2 = imu.calcGyro(imu.gy);
+  float q3 = imu.calcGyro(imu.gz);
 
   //  SerialPort.println("Q: " + String(q0, 4) + ", " +
   //                      String(q1, 4) + ", " + String(q2, 4) +
@@ -116,8 +117,7 @@ void printIMUData(void)
   //   SerialPort.println("Time: " + String(imu.time) + " ms");
   //   SerialPort.println();
   double pitch = imu.pitch;
-
-  imu.pitch = imu.pitch;
+  
   if (pitch > 180) {
     pitch -= 360;
   }
@@ -134,7 +134,9 @@ void printIMUData(void)
 
   double altitude = altimeter.readAltitude(); //* 1000 - 490000;
   double pressure = altimeter.readPressure();
-
+  
+  //roll = (roll*cos(45)) + (pitch*sin(45));
+  //pitch  = (roll*sin(45)) + (pitch*cos(45));
 
   //double altitude2 = (pressure - 0.3) * powf((1 + (.00008422880686 * (altimeter.readAltitude() / powf((pressure - .3), 0.190284)))),5.2553026);
 
@@ -170,17 +172,17 @@ if(abs(roll) < 2)
 roll = 0;  
 }
 
-  SerialPort.print(q0);
-  SerialPort.print(" ");
+  //SerialPort.print(g0);
+  //SerialPort.print(" ");
 
-  SerialPort.print(q1);
+  /*SerialPort.print(q1);
   SerialPort.print(" ");
   SerialPort.print(q2);
   //SerialPort.println(-filter);
   SerialPort.print(" ");
   SerialPort.print(q3);
   SerialPort.print(" ");
-
+*/
     SerialPort.print(yaw);
   SerialPort.print(" ");
 
@@ -216,12 +218,13 @@ roll = 0;
   v0 = v1;
   p0 = p1;
 
+
   Serial1.print(",");
   Serial1.print(yaw);
   Serial1.print(" ");
-  Serial1.print(pitch);
-  Serial1.print(" ");
   Serial1.print(roll);
+  Serial1.print(" ");
+  Serial1.print(-pitch);
   Serial1.print(" ");
   Serial1.println(kalman);
 
