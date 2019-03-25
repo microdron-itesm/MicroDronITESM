@@ -18,12 +18,7 @@ void DRONE_MSG_HANDLER_INITIALIZE(){
     DRONE_MSG_CURRENT_STATE = DRONE_MSG_HANDLER_STATE_MSG_START;
 }
 
-void DRONE_MSG_SAFETY(){
-            LAST_DATA_MANUAL_CONTROL.topLeft = 0;
-            LAST_DATA_MANUAL_CONTROL.topRight = 0;
-            LAST_DATA_MANUAL_CONTROL.bottomLeft = 0;
-            LAST_DATA_MANUAL_CONTROL.bottomRight = 0;
-                        }
+
 void DRONE_MSG_HANDLER_UPDATE(){
 
     switch(DRONE_MSG_CURRENT_STATE){
@@ -60,120 +55,29 @@ void DRONE_MSG_HANDLER_UPDATE(){
                     
                     if(NEW_DRONE_MESSAGE){
                         switch(MSG_ID){
-                            case 'Y':
+                            case 'S':
                             {
-                            if( LAST_DATA_UPDATE_SETPOINTS.yaw > 130){
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                            if( LAST_DATA_UPDATE_SETPOINTS.pitch > 60)
-                            {
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                            if( LAST_DATA_UPDATE_SETPOINTS.roll > 60)
-                            {
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                            if( LAST_DATA_UPDATE_SETPOINTS.height > 50)
-                            {
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
+
                                 LAST_MSG_TYPE = DRONE_MSG_TYPE_UPDATE_SETPOINTS;
                                 
                                 LAST_DATA_UPDATE_SETPOINTS.yaw = firstValue;
-                                LAST_DATA_UPDATE_SETPOINTS.pitch = LAST_DATA_UPDATE_SETPOINTS.pitch;
-                                LAST_DATA_UPDATE_SETPOINTS.roll = LAST_DATA_UPDATE_SETPOINTS.roll;
-                                LAST_DATA_UPDATE_SETPOINTS.height = LAST_DATA_UPDATE_SETPOINTS.height;
-                                break;
-                            }
-                            
-                            case 'P':
-                            {
-                            if(LAST_DATA_UPDATE_SETPOINTS.yaw > 130){
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                            if(secondValue > 100)
-                            {
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                            if(thirdValue > 100)
-                            {
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                            if(fourthValue > 100)
-                            {
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                                LAST_MSG_TYPE = DRONE_MSG_TYPE_UPDATE_SETPOINTS;
-                                LAST_DATA_UPDATE_SETPOINTS.yaw = LAST_DATA_UPDATE_SETPOINTS.yaw;
                                 LAST_DATA_UPDATE_SETPOINTS.pitch = secondValue;
-                                LAST_DATA_UPDATE_SETPOINTS.roll = LAST_DATA_UPDATE_SETPOINTS.roll;
-                                LAST_DATA_UPDATE_SETPOINTS.height = LAST_DATA_UPDATE_SETPOINTS.height;
-                                break;
-                            }
-                            
-                            case 'R':
-                            {
-                            if(firstValue > 130){
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                            if(secondValue > 100)
-                            {
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                            if(thirdValue > 100)
-                            {
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                            if(fourthValue > 100)
-                            {
-                            DRONE_MSG_SAFETY();
-                            MSG_ID = 'M';
-                            }
-                                LAST_MSG_TYPE = DRONE_MSG_TYPE_UPDATE_SETPOINTS;
-                                LAST_DATA_UPDATE_SETPOINTS.yaw = LAST_DATA_UPDATE_SETPOINTS.yaw;
-                                LAST_DATA_UPDATE_SETPOINTS.pitch = LAST_DATA_UPDATE_SETPOINTS.pitch;
                                 LAST_DATA_UPDATE_SETPOINTS.roll = thirdValue;
-                                LAST_DATA_UPDATE_SETPOINTS.height = LAST_DATA_UPDATE_SETPOINTS.height;
+                                LAST_DATA_UPDATE_SETPOINTS.height = fourthValue;
                                 break;
                             }
+                          
                             case 'M':
                             {
                                 LAST_MSG_TYPE = DRONE_MSG_TYPE_MANUAL_CONTROL;
-                                if(firstValue > 500)
-                                {
-                                    firstValue = 300;
-                                }
-                                if(secondValue > 500)
-                                {
-                                    secondValue = 300;
-                                }
-                                if(thirdValue > 500)
-                                {
-                                    thirdValue = 300;
-                                }
-                                if(fourthValue > 500)
-                                {
-                                    fourthValue = 300;
-                                }
-                                LAST_DATA_MANUAL_CONTROL.topLeft = firstValue;
-                                LAST_DATA_MANUAL_CONTROL.topRight = secondValue;
-                                LAST_DATA_MANUAL_CONTROL.bottomLeft = thirdValue;
-                                LAST_DATA_MANUAL_CONTROL.bottomRight = fourthValue;
-                                
-                                break;
+
+                                LAST_DATA_MANUAL_CONTROL.bottomLeft = firstValue;
+                                LAST_DATA_MANUAL_CONTROL.bottomRight = secondValue;
+                                LAST_DATA_MANUAL_CONTROL.topRight = thirdValue;
+                                LAST_DATA_MANUAL_CONTROL.topLeft = fourthValue;
+                          
+
                             }
-                            
                             case 'K':
                             {
                                 LAST_MSG_TYPE = DRONE_MSG_TYPE_KILL_MOTORS;

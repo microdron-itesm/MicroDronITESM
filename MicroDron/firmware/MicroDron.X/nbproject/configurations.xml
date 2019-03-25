@@ -19,7 +19,7 @@
       <itemPath>../src/drone_control/PID/pitch_pid.h</itemPath>
       <itemPath>../src/drone_control/PID/roll_pid.h</itemPath>
       <itemPath>../src/drone_control/PID/yaw_pid.h</itemPath>
-      <itemPath>../src/drone_motor_output.h</itemPath>
+      <itemPath>../src/drone_control/drone_motor_output.h</itemPath>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
