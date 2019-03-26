@@ -65,7 +65,10 @@ void APP_Initialize(void) {
 
     appData.state = APP_STATE_INIT;
     DRONE_CTRL_INITIALIZE();
-    
+    DRV_OC0_PulseWidthSet(0);
+    DRV_OC1_PulseWidthSet(0);
+    DRV_OC2_PulseWidthSet(0);
+    DRV_OC3_PulseWidthSet(0);    
 }
 
 void APP_Tasks(void) {

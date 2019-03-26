@@ -75,8 +75,8 @@ void DRONE_MSG_HANDLER_UPDATE(){
                                 LAST_DATA_MANUAL_CONTROL.bottomRight = secondValue;
                                 LAST_DATA_MANUAL_CONTROL.topRight = thirdValue;
                                 LAST_DATA_MANUAL_CONTROL.topLeft = fourthValue;
-                          
-
+                                break;
+                                
                             }
                             case 'K':
                             {
