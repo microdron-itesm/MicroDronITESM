@@ -51,7 +51,11 @@ void DRONE_MSG_HANDLER_UPDATE(){
 
                     int ret = sscanf(DRONE_MSG, "%c %f %f %f %f",
                             &MSG_ID, &firstValue, &secondValue, &thirdValue, &fourthValue);
-                    NEW_DRONE_MESSAGE = ret == 5;
+                    if(MSG_ID == 'S' || MSG_ID == 'M'){
+                        NEW_DRONE_MESSAGE = ret == 5;
+                    }else{
+                        NEW_DRONE_MESSAGE = true;
+                    }
                     
                     if(NEW_DRONE_MESSAGE){
                         switch(MSG_ID){

@@ -35,6 +35,13 @@ DRONE_POSE dronePose;
 DRONE_MSG_TYPE LAST_DRONE_MSG;
 DRONE_MSG_DATA_UPDATE_SETPOINTS LAST_UPDATE_SETPOINT;
 DRONE_CTRL_MOTOR_OUTPUT CURRENT_MOTOR_OUTPUT;
+uint32_t LAST_TIME_UPDATE = 0;
+
+float errorChange = 0;
+float currentError = 0;
+float lastError = 0;
+
+unsigned long timeCounter = 0;
 
 void APP_UpdateState(void);
 
@@ -68,7 +75,8 @@ void APP_Initialize(void) {
     DRV_OC0_PulseWidthSet(0);
     DRV_OC1_PulseWidthSet(0);
     DRV_OC2_PulseWidthSet(0);
-    DRV_OC3_PulseWidthSet(0);    
+    DRV_OC3_PulseWidthSet(0);   
+    DRONE_CTRL_USE_MANUAL_THRUST(true);
 }
 
 void APP_Tasks(void) {
@@ -124,15 +132,25 @@ void APP_Tasks(void) {
         }
     }
     
+    
 
 }
 
 void APP_UpdateState(){
-    if(IMU_MSG_HANDLER_NEW_POSE_AVAILABLE()){
-        dronePose = IMU_MSG_HANDLER_LAST_POSE();
-        dronePose.height = 0.0;
+    timeCounter++;
+    
+    dronePose = IMU_MSG_HANDLER_LAST_POSE();
+    dronePose.height = 0.0;
+
+    currentError = 0 - dronePose.yaw;
+
+    if(timeCounter - LAST_TIME_UPDATE > 2000){ //THIS IS UGLY, BUT IM DESPERATE
+        LAST_TIME_UPDATE = timeCounter;
+        errorChange = currentError - lastError;
+        lastError = currentError;
         DRONE_CTRL_UPDATE(dronePose);
     }
+
 
     if(DRONE_MSG_HANDLER_NEW_MSG_AVAILABLE()){
         LAST_DRONE_MSG = DRONE_MSG_HANDLER_LAST_MSG_TYPE();
@@ -141,7 +159,7 @@ void APP_UpdateState(){
             case DRONE_MSG_TYPE_UPDATE_SETPOINTS:
             {
                 LAST_UPDATE_SETPOINT = DRONE_MSG_HANDLER_DATA_UPDATE_SETPOINTS();
-                DRONE_CTRL_SET_TARGET_HEIGHT(LAST_UPDATE_SETPOINT.height);
+                DRONE_CTRL_SET_MANUAL_THRUST(LAST_UPDATE_SETPOINT.height);
                 DRONE_CTRL_SET_TARGET_PITCH(LAST_UPDATE_SETPOINT.pitch);
                 DRONE_CTRL_SET_TARGET_ROLL(LAST_UPDATE_SETPOINT.roll);
                 DRONE_CTRL_SET_TARGET_YAW(LAST_UPDATE_SETPOINT.yaw);
@@ -152,7 +170,15 @@ void APP_UpdateState(){
             {
                 CURRENT_MOTOR_OUTPUT = DRONE_MSG_HANDLER_DATA_MANUAL_CONTROL();
                 break;
-            }            
+            }
+            case DRONE_MSG_TYPE_KILL_MOTORS:
+            {
+                CURRENT_MOTOR_OUTPUT.bottomLeft = 0;
+                CURRENT_MOTOR_OUTPUT.bottomRight = 0;
+                CURRENT_MOTOR_OUTPUT.topLeft = 0;
+                CURRENT_MOTOR_OUTPUT.topRight = 0;
+                break;
+            }
             default:
             {
                 break;
@@ -163,11 +189,12 @@ void APP_UpdateState(){
     if(WIFI_MSG_SENDER_LAST_MSG_SENT()){
         unsigned char msgBuffer[100] = {'\0'};
         int ret = snprintf(msgBuffer, sizeof msgBuffer, 
-                "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M: %.1f %.1f %.1f %.1f\r"
+                "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M: %.1f %.1f %.1f %.1f T: %f\r"
                 , dronePose.yaw, LAST_DRONE_MSG ,dronePose.pitch,
                     dronePose.roll, dronePose.height,
                 CURRENT_MOTOR_OUTPUT.topLeft, CURRENT_MOTOR_OUTPUT.topRight,
-                     CURRENT_MOTOR_OUTPUT.bottomLeft, CURRENT_MOTOR_OUTPUT.bottomRight);
+                     CURRENT_MOTOR_OUTPUT.bottomLeft, CURRENT_MOTOR_OUTPUT.bottomRight, errorChange);
+
         WIFI_MSG_SENDER_SEND_MSG(msgBuffer, strlen(msgBuffer) + 1);
     }
 }
