@@ -10,9 +10,19 @@ unsigned short int DRONE_MSG_MAX_SIZE = 50;
 
 DRONE_MSG_DATA_UPDATE_SETPOINTS LAST_DATA_UPDATE_SETPOINTS;
 DRONE_CTRL_MOTOR_OUTPUT LAST_DATA_MANUAL_CONTROL;
+PID_CONFIG LAST_PID_UPDATE;
 
 bool NEW_DRONE_MESSAGE = false;
 
+char MSG_ID = '\0';
+char PID_UPDATE_TARGET = {'\0'};
+float LAST_K_VALUE = 0.0f;
+
+float firstValue = 0;
+float secondValue = 0;
+float thirdValue = 0;
+float fourthValue = 0;
+                    
 void DRONE_MSG_HANDLER_INITIALIZE(){
     LAST_MSG_TYPE = DRONE_MSG_TYPE_NONE;
     DRONE_MSG_CURRENT_STATE = DRONE_MSG_HANDLER_STATE_MSG_START;
@@ -43,19 +53,28 @@ void DRONE_MSG_HANDLER_UPDATE(){
                 if(newByte != '\n' && DRONE_MSG_INDEX + 1 < DRONE_MSG_MAX_SIZE ){
                     DRONE_MSG[DRONE_MSG_INDEX++] = newByte;
                 }else{
-                    char MSG_ID = {'\0'};
-                    float firstValue = 0;
-                    float secondValue = 0;
-                    float thirdValue = 0;
-                    float fourthValue = 0;
 
-                    int ret = sscanf(DRONE_MSG, "%c %f %f %f %f",
-                            &MSG_ID, &firstValue, &secondValue, &thirdValue, &fourthValue);
+                    int ret = sscanf(DRONE_MSG, "%c",
+                            &MSG_ID);
+                    
                     if(MSG_ID == 'S' || MSG_ID == 'M'){
+                        ret = sscanf(DRONE_MSG, "%c %f %f %f %f",
+                            &MSG_ID, &firstValue, &secondValue, &thirdValue, &fourthValue);
                         NEW_DRONE_MESSAGE = ret == 5;
+                        
+                    }else if(MSG_ID == 'P'){
+                        ret = sscanf(DRONE_MSG, "%c %c %f %f %f",
+                            &MSG_ID, &PID_UPDATE_TARGET, &firstValue, &secondValue, &thirdValue);
+                        NEW_DRONE_MESSAGE = ret == 5;
+                        
+                    }else if(MSG_ID == 'K'){
+                        ret = sscanf(DRONE_MSG, "%c %f",
+                            &MSG_ID, &firstValue);
+                        NEW_DRONE_MESSAGE = ret == 2;                        
                     }else{
                         NEW_DRONE_MESSAGE = true;
                     }
+                    
                     
                     if(NEW_DRONE_MESSAGE){
                         switch(MSG_ID){
@@ -82,12 +101,52 @@ void DRONE_MSG_HANDLER_UPDATE(){
                                 break;
                                 
                             }
-                            case 'K':
+                            case 'E':
                             {
                                 LAST_MSG_TYPE = DRONE_MSG_TYPE_KILL_MOTORS;
                                 break;
                             }
-                            
+                            case '1':
+                            {
+                                LAST_MSG_TYPE = DRONE_MSG_TYPE_MANUAL_CONTROL;
+
+                                LAST_DATA_MANUAL_CONTROL.bottomLeft = LAST_DATA_MANUAL_CONTROL.bottomLeft - 50;
+                                LAST_DATA_MANUAL_CONTROL.bottomRight =  LAST_DATA_MANUAL_CONTROL.bottomRight - 50;
+                                LAST_DATA_MANUAL_CONTROL.topRight =  LAST_DATA_MANUAL_CONTROL.topRight - 50;
+                                LAST_DATA_MANUAL_CONTROL.topLeft =  LAST_DATA_MANUAL_CONTROL.topLeft - 50;
+
+                                break;
+                            }
+                            case '2':
+                            {
+                                LAST_MSG_TYPE = DRONE_MSG_TYPE_MANUAL_CONTROL;
+
+                                LAST_DATA_MANUAL_CONTROL.bottomLeft = LAST_DATA_MANUAL_CONTROL.bottomLeft + 50;
+                                LAST_DATA_MANUAL_CONTROL.bottomRight =  LAST_DATA_MANUAL_CONTROL.bottomRight + 50;
+                                LAST_DATA_MANUAL_CONTROL.topRight =  LAST_DATA_MANUAL_CONTROL.topRight + 50;
+                                LAST_DATA_MANUAL_CONTROL.topLeft =  LAST_DATA_MANUAL_CONTROL.topLeft + 50;
+                                
+                                break;
+                            }
+                            case 'P':
+                            {
+                                LAST_MSG_TYPE = DRONE_MSG_TYPE_UPDATE_PID;
+
+                                LAST_PID_UPDATE.p = firstValue;
+                                LAST_PID_UPDATE.i = secondValue;
+                                LAST_PID_UPDATE.d = thirdValue;
+                                LAST_PID_UPDATE.clampled = true;
+                                LAST_PID_UPDATE.min = -1.0;
+                                LAST_PID_UPDATE.max = 1.0;
+
+                                break;
+                            }
+                            case 'K':
+                            {
+                                LAST_MSG_TYPE = DRONE_MSG_TYPE_UPDATE_K;
+                                LAST_K_VALUE = firstValue;
+                                break;
+                            }
                             default:
                             {
                                 LAST_MSG_TYPE = DRONE_MSG_TYPE_NONE;
@@ -122,4 +181,16 @@ DRONE_CTRL_MOTOR_OUTPUT DRONE_MSG_HANDLER_DATA_MANUAL_CONTROL(){
 
 bool DRONE_MSG_HANDLER_NEW_MSG_AVAILABLE(){
     return NEW_DRONE_MESSAGE;
+}
+
+PID_CONFIG DRONE_MSG_HANDLER_GET_PID_CONFIG_UPDATE(){
+    return LAST_PID_UPDATE;
+}
+
+char DRONE_MSG_HANDLER_GET_PID_UPDATE_TARGET(){
+    return PID_UPDATE_TARGET;
+}
+
+float DRONE_MSG_HANDLER_GET_LAST_K(){
+    return LAST_K_VALUE;
 }

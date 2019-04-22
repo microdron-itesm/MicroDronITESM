@@ -6,7 +6,7 @@ unsigned short int IMU_MESSAGE_INDEX = 0;
 DRONE_POSE IMU_LAST_POSE;
 IMU_MSG_HANDLER_STATE IMU_MSG_CURRENT_STATE;
 bool NEW_POSE_AVAILABLE = false;
-uint32_t LAST_TIME = 0;
+float LAST_TIME = 0;
 
 /**
  * Initializes everything that is needed to receive messages from IMU
@@ -50,12 +50,9 @@ void IMU_MSG_HANDLER_UPDATE(){
                 if(newByte != '\n' && IMU_MESSAGE_INDEX + 1 < IMU_MESSAGE_MAX_SIZE){
                     IMU_MESSAGE[IMU_MESSAGE_INDEX++] = newByte;
                 }else{
-                    int ret = sscanf(IMU_MESSAGE, "%f %f %f %f %i",
+                    int ret = sscanf(IMU_MESSAGE, "%f %f %f %f %f",
                             &IMU_LAST_POSE.yaw, &IMU_LAST_POSE.roll, &IMU_LAST_POSE.pitch, &IMU_LAST_POSE.height, &LAST_TIME );
                     
-                    IMU_LAST_POSE.roll *= -1;
-                    IMU_LAST_POSE.yaw *= -1;
-
                     NEW_POSE_AVAILABLE = ret == 5;
                     
                     memset(IMU_MESSAGE, 0, sizeof IMU_MESSAGE);
@@ -88,7 +85,7 @@ bool IMU_MSG_HANDLER_NEW_POSE_AVAILABLE(){
     return NEW_POSE_AVAILABLE;
 }
 
-uint32_t IMU_MSG_GET_TIME(){
+float IMU_MSG_GET_TIME(){
     return LAST_TIME;
 }
 

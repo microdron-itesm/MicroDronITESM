@@ -35,13 +35,7 @@ DRONE_POSE dronePose;
 DRONE_MSG_TYPE LAST_DRONE_MSG;
 DRONE_MSG_DATA_UPDATE_SETPOINTS LAST_UPDATE_SETPOINT;
 DRONE_CTRL_MOTOR_OUTPUT CURRENT_MOTOR_OUTPUT;
-uint32_t LAST_TIME_UPDATE = 0;
-
-float errorChange = 0;
-float currentError = 0;
-float lastError = 0;
-
-unsigned long timeCounter = 0;
+float LAST_TIME_UPDATE = 0;
 
 void APP_UpdateState(void);
 
@@ -98,7 +92,6 @@ void APP_Tasks(void) {
                 case DRONE_MSG_TYPE_UPDATE_SETPOINTS:
                 {
                     CURRENT_MOTOR_OUTPUT = DRONE_CTRL_GET_MOTOR_OUTPUT();
-
                 }
                 case DRONE_MSG_TYPE_MANUAL_CONTROL:
                 {
@@ -137,25 +130,18 @@ void APP_Tasks(void) {
 }
 
 void APP_UpdateState(){
-    timeCounter++;
     
     dronePose = IMU_MSG_HANDLER_LAST_POSE();
     dronePose.height = 0.0;
-
-    currentError = 0 - dronePose.yaw;
-
-    if(timeCounter - LAST_TIME_UPDATE > 2000){ //THIS IS UGLY, BUT IM DESPERATE
-        LAST_TIME_UPDATE = timeCounter;
-        errorChange = currentError - lastError;
-        lastError = currentError;
+    
+    if(IMU_MSG_GET_TIME() - LAST_TIME_UPDATE > 0.05){
+        LAST_TIME_UPDATE = IMU_MSG_GET_TIME();
         DRONE_CTRL_UPDATE(dronePose);
     }
 
-
+   
     if(DRONE_MSG_HANDLER_NEW_MSG_AVAILABLE()){
-        LAST_DRONE_MSG = DRONE_MSG_HANDLER_LAST_MSG_TYPE();
-
-        switch(LAST_DRONE_MSG){
+        switch(DRONE_MSG_HANDLER_LAST_MSG_TYPE()){
             case DRONE_MSG_TYPE_UPDATE_SETPOINTS:
             {
                 LAST_UPDATE_SETPOINT = DRONE_MSG_HANDLER_DATA_UPDATE_SETPOINTS();
@@ -179,22 +165,73 @@ void APP_UpdateState(){
                 CURRENT_MOTOR_OUTPUT.topRight = 0;
                 break;
             }
+            case DRONE_MSG_TYPE_UPDATE_PID:
+            {                   
+                switch(DRONE_MSG_HANDLER_GET_PID_UPDATE_TARGET()){
+                    case 'P':
+                    {
+                        DRONE_CTRL_SET_PITCH_PID(DRONE_MSG_HANDLER_GET_PID_CONFIG_UPDATE());
+                        break;
+                    }
+                    case 'R':
+                    {
+                        DRONE_CTRL_SET_ROLL_PID(DRONE_MSG_HANDLER_GET_PID_CONFIG_UPDATE());
+                        break;
+                    }
+                    case 'Y':
+                    {
+                        DRONE_CTRL_SET_YAW_PID(DRONE_MSG_HANDLER_GET_PID_CONFIG_UPDATE());
+                        break;
+                    }
+                    case 'H':
+                    {
+                        DRONE_CTRL_SET_HEIGHT_PID(DRONE_MSG_HANDLER_GET_PID_CONFIG_UPDATE());
+                        break;
+                    }
+                    default:
+                    {
+                        break;
+                    }
+                }
+                break;
+            }
+            case DRONE_MSG_TYPE_UPDATE_K:
+            {
+                DRONE_CTRL_SET_K(DRONE_MSG_HANDLER_GET_LAST_K());
+                break;
+            }
             default:
             {
                 break;
             }
         }
+        
+        if(LAST_DRONE_MSG == DRONE_MSG_TYPE_UPDATE_SETPOINTS && 
+                    (DRONE_MSG_HANDLER_LAST_MSG_TYPE() == DRONE_MSG_TYPE_UPDATE_PID || 
+                    DRONE_MSG_HANDLER_LAST_MSG_TYPE() == DRONE_MSG_TYPE_UPDATE_K)){
+            LAST_DRONE_MSG = DRONE_MSG_TYPE_UPDATE_SETPOINTS;
+        }else{
+            LAST_DRONE_MSG = DRONE_MSG_HANDLER_LAST_MSG_TYPE();
+        }
     }   
     
     if(WIFI_MSG_SENDER_LAST_MSG_SENT()){
-        unsigned char msgBuffer[100] = {'\0'};
+        unsigned char msgBuffer[200] = {'\0'};
+        PID_CONFIG pitchPid = DRONE_CTRL_GET_PITCH_PID();
+        PID_CONFIG yawPid = DRONE_CTRL_GET_YAW_PID();
+        PID_CONFIG rollPid = DRONE_CTRL_GET_ROLL_PID();
+        PID_CONFIG heightPid = DRONE_CTRL_GET_HEIGHT_PID();
+
         int ret = snprintf(msgBuffer, sizeof msgBuffer, 
-                "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M: %.1f %.1f %.1f %.1f T: %f\r"
+               "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M:%.1f %.1f %.1f %.1f PID: %.0f Y:%f %f %f P:%f %f %f R:%f %f %f H:%f %f %f K"
                 , dronePose.yaw, LAST_DRONE_MSG ,dronePose.pitch,
                     dronePose.roll, dronePose.height,
                 CURRENT_MOTOR_OUTPUT.topLeft, CURRENT_MOTOR_OUTPUT.topRight,
-                     CURRENT_MOTOR_OUTPUT.bottomLeft, CURRENT_MOTOR_OUTPUT.bottomRight, errorChange);
-
-        WIFI_MSG_SENDER_SEND_MSG(msgBuffer, strlen(msgBuffer) + 1);
+                     CURRENT_MOTOR_OUTPUT.bottomLeft, CURRENT_MOTOR_OUTPUT.bottomRight,
+                    DRONE_CTRL_GET_K(), yawPid.p, yawPid.i, yawPid.d, pitchPid.p, 
+                    pitchPid.i, pitchPid.d, rollPid.p, rollPid.i, rollPid.d, 
+                    heightPid.p, heightPid.i, heightPid.d);
+        
+        WIFI_MSG_SENDER_SEND_MSG(msgBuffer, strlen(msgBuffer));
     }
 }
