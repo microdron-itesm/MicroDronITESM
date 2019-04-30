@@ -35,12 +35,13 @@ DRONE_POSE dronePose;
 DRONE_MSG_TYPE LAST_DRONE_MSG;
 DRONE_MSG_DATA_UPDATE_SETPOINTS LAST_UPDATE_SETPOINT;
 DRONE_CTRL_MOTOR_OUTPUT CURRENT_MOTOR_OUTPUT;
-float LAST_TIME_UPDATE = 0;
+float LAST_TIME_UPDATE;
 
 void APP_UpdateState(void);
 
 void APP_Initialize(void) {
-    dronePose.height = 0.0;
+    LAST_TIME_UPDATE = 0.0f;
+    dronePose.zAccel = 0.0;
     dronePose.pitch = 0.0;
     dronePose.roll = 0.0;
     dronePose.yaw = 0.0;
@@ -69,8 +70,9 @@ void APP_Initialize(void) {
     DRV_OC0_PulseWidthSet(0);
     DRV_OC1_PulseWidthSet(0);
     DRV_OC2_PulseWidthSet(0);
-    DRV_OC3_PulseWidthSet(0);   
+    DRV_OC3_PulseWidthSet(0); 
     DRONE_CTRL_USE_MANUAL_THRUST(true);
+    DRONE_CTRL_SET_MANUAL_THRUST(0.0);
 }
 
 void APP_Tasks(void) {
@@ -84,14 +86,15 @@ void APP_Tasks(void) {
             appData.state = APP_STATE_SERVICE_TASKS;
             break;
         }
-
+        
         case APP_STATE_SERVICE_TASKS:
         {
                     
             switch(LAST_DRONE_MSG){
                 case DRONE_MSG_TYPE_UPDATE_SETPOINTS:
-                {
+                {                
                     CURRENT_MOTOR_OUTPUT = DRONE_CTRL_GET_MOTOR_OUTPUT();
+
                 }
                 case DRONE_MSG_TYPE_MANUAL_CONTROL:
                 {
@@ -132,12 +135,7 @@ void APP_Tasks(void) {
 void APP_UpdateState(){
     
     dronePose = IMU_MSG_HANDLER_LAST_POSE();
-    dronePose.height = 0.0;
-    
-    if(IMU_MSG_GET_TIME() - LAST_TIME_UPDATE > 0.05){
-        LAST_TIME_UPDATE = IMU_MSG_GET_TIME();
-        DRONE_CTRL_UPDATE(dronePose);
-    }
+   
 
    
     if(DRONE_MSG_HANDLER_NEW_MSG_AVAILABLE()){
@@ -149,6 +147,7 @@ void APP_UpdateState(){
                 DRONE_CTRL_SET_TARGET_PITCH(LAST_UPDATE_SETPOINT.pitch);
                 DRONE_CTRL_SET_TARGET_ROLL(LAST_UPDATE_SETPOINT.roll);
                 DRONE_CTRL_SET_TARGET_YAW(LAST_UPDATE_SETPOINT.yaw);
+
                 break;
             }
 
@@ -223,15 +222,20 @@ void APP_UpdateState(){
         PID_CONFIG heightPid = DRONE_CTRL_GET_HEIGHT_PID();
 
         int ret = snprintf(msgBuffer, sizeof msgBuffer, 
-               "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M:%.1f %.1f %.1f %.1f PID: %.0f Y:%f %f %f P:%f %f %f R:%f %f %f H:%f %f %f K"
+               "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M:%.1f %.1f %.1f %.1f PID: %.0f Y:%f %f %f P:%f %f %f R:%f %f %f H:%f %f %f %f K"
                 , dronePose.yaw, LAST_DRONE_MSG ,dronePose.pitch,
-                    dronePose.roll, dronePose.height,
+                    dronePose.roll, dronePose.zAccel,
                 CURRENT_MOTOR_OUTPUT.topLeft, CURRENT_MOTOR_OUTPUT.topRight,
                      CURRENT_MOTOR_OUTPUT.bottomLeft, CURRENT_MOTOR_OUTPUT.bottomRight,
                     DRONE_CTRL_GET_K(), yawPid.p, yawPid.i, yawPid.d, pitchPid.p, 
                     pitchPid.i, pitchPid.d, rollPid.p, rollPid.i, rollPid.d, 
-                    heightPid.p, heightPid.i, heightPid.d);
+                    heightPid.p, heightPid.i, heightPid.d, IMU_MSG_GET_TIME() - LAST_TIME_UPDATE);
         
         WIFI_MSG_SENDER_SEND_MSG(msgBuffer, strlen(msgBuffer));
     }
+    if(IMU_MSG_GET_TIME() - LAST_TIME_UPDATE > 0.1){
+        LAST_TIME_UPDATE = IMU_MSG_GET_TIME();
+        DRONE_CTRL_UPDATE(dronePose, IMU_MSG_GET_TIME());
+    }
+
 }

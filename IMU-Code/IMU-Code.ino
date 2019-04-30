@@ -64,26 +64,7 @@ void setup()
 void loop()
 {
   
-  double currentTime = imu.time / 1000.0;  
-  char time[20] = {'\0'};
-  sprintf(time, "%.3f", currentTime);
   
-  Serial1.print(",");
-  Serial1.print(yaw);
-  Serial1.print(" ");
-  Serial1.print(pitch);
-  Serial1.print(" ");
-  Serial1.print(roll);
-  Serial1.print(" ");
-  Serial1.print(imu.calcAccel(imu.az));
-  Serial1.print(" ");
-  Serial1.println(String(time));
-   
-  SerialPort.print(",");
-  SerialPort.print(imu.calcAccel(imu.az));
-  SerialPort.print(" ");
-  SerialPort.print(15);
-  SerialPort.println(" ");
   
   if ( imu.fifoAvailable() > 0 ) // Check for new data in the FIFO
   {
@@ -96,11 +77,40 @@ void loop()
           // and imu.qw, imu.qx, imu.qy, and imu.qz -- quaternions
           imu.computeEulerAnglesX();
           updateImu();
+          sendState();
       }
   }
 
   //SerialPort.println(String(time));
   }
+
+void sendState(){
+  double currentTime = imu.time / 1000.0;  
+  char time[20] = {'\0'};
+  sprintf(time, "%.3f", currentTime);
+  
+  Serial1.print(",");
+  Serial1.print(yaw);
+  Serial1.print(" ");
+  Serial1.print(pitch);
+  Serial1.print(" ");
+  Serial1.print(roll);
+  Serial1.print(" ");
+  Serial1.print(-1.0 - imu.calcAccel(imu.az));
+  Serial1.print(" ");
+  Serial1.println(String(time));
+   
+  SerialPort.print(",");
+  SerialPort.print(yaw);
+  SerialPort.print(" ");
+  SerialPort.print(pitch);
+  SerialPort.print(" ");
+  SerialPort.print(roll);
+  SerialPort.print(" ");
+  SerialPort.print(-1.0 - imu.calcAccel(imu.az));
+  SerialPort.print(" ");
+  SerialPort.println(String(time));  
+}
 
 void updateImu(void)
 {
