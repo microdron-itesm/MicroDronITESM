@@ -33,6 +33,8 @@
 MPU9250_DMP imu;
 float yaw = 0.0f, pitch =0.0f, roll = 0.0f, height = 0.0f;
 float yawInRadians = 0.0f;
+double currentTime = 0.0;
+double lastTimeUpdate = 0.0f;
 
 void setup()
 {
@@ -64,8 +66,6 @@ void setup()
 void loop()
 {
   
-  
-  
   if ( imu.fifoAvailable() > 0 ) // Check for new data in the FIFO
   {
       // Use dmpUpdateFifo to update the ax, gx, qx, etc. values
@@ -80,12 +80,14 @@ void loop()
           sendState();
       }
   }
-
-  //SerialPort.println(String(time));
+  if(currentTime - lastTimeUpdate > 0.01){
+    sendState();
+    lastTimeUpdate = currentTime;  
   }
+}
 
 void sendState(){
-  double currentTime = imu.time / 1000.0;  
+  currentTime = imu.time / 1000.0;  
   char time[20] = {'\0'};
   sprintf(time, "%.3f", currentTime);
   

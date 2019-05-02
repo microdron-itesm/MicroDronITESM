@@ -36,10 +36,16 @@ DRONE_MSG_TYPE LAST_DRONE_MSG;
 DRONE_MSG_DATA_UPDATE_SETPOINTS LAST_UPDATE_SETPOINT;
 DRONE_CTRL_MOTOR_OUTPUT CURRENT_MOTOR_OUTPUT;
 float LAST_TIME_UPDATE;
+long ITERATION_COUNTER;
+long LAST_HEARTBEAT;
+long MAX_HEARTBEAT_INTERVAL = 2000;
 
 void APP_UpdateState(void);
 
 void APP_Initialize(void) {
+    ITERATION_COUNTER = 0;
+    LAST_HEARTBEAT = 0;
+    
     LAST_TIME_UPDATE = 0.0f;
     dronePose.zAccel = 0.0;
     dronePose.pitch = 0.0;
@@ -64,7 +70,7 @@ void APP_Initialize(void) {
     
     DRV_TMR0_Start();
     DRV_TMR1_Start();
-
+    
     appData.state = APP_STATE_INIT;
     DRONE_CTRL_INITIALIZE();
     DRV_OC0_PulseWidthSet(0);
@@ -129,17 +135,29 @@ void APP_Tasks(void) {
     }
     
     
-
 }
 
 void APP_UpdateState(){
+    ITERATION_COUNTER++;
+      
     
     dronePose = IMU_MSG_HANDLER_LAST_POSE();
-   
+    
+    if(IMU_MSG_HANDLER_NEW_POSE_AVAILABLE()){
+        LAST_TIME_UPDATE = IMU_MSG_GET_TIME();
+        DRONE_CTRL_UPDATE(dronePose, IMU_MSG_GET_TIME());
+    }
 
    
     if(DRONE_MSG_HANDLER_NEW_MSG_AVAILABLE()){
         switch(DRONE_MSG_HANDLER_LAST_MSG_TYPE()){
+            case DRONE_MSG_TYPE_HEARTBEAT:
+            {
+   
+                LAST_HEARTBEAT = ITERATION_COUNTER;
+                
+                break;
+            }
             case DRONE_MSG_TYPE_UPDATE_SETPOINTS:
             {
                 LAST_UPDATE_SETPOINT = DRONE_MSG_HANDLER_DATA_UPDATE_SETPOINTS();
@@ -209,10 +227,18 @@ void APP_UpdateState(){
                     (DRONE_MSG_HANDLER_LAST_MSG_TYPE() == DRONE_MSG_TYPE_UPDATE_PID || 
                     DRONE_MSG_HANDLER_LAST_MSG_TYPE() == DRONE_MSG_TYPE_UPDATE_K)){
             LAST_DRONE_MSG = DRONE_MSG_TYPE_UPDATE_SETPOINTS;
-        }else{
+        }else if(DRONE_MSG_HANDLER_LAST_MSG_TYPE() != DRONE_MSG_TYPE_HEARTBEAT){
             LAST_DRONE_MSG = DRONE_MSG_HANDLER_LAST_MSG_TYPE();
         }
     }   
+
+    if(ITERATION_COUNTER - LAST_HEARTBEAT > MAX_HEARTBEAT_INTERVAL){
+                CURRENT_MOTOR_OUTPUT.bottomLeft = 0;
+                CURRENT_MOTOR_OUTPUT.bottomRight = 0;
+                CURRENT_MOTOR_OUTPUT.topLeft = 0;
+                CURRENT_MOTOR_OUTPUT.topRight = 0;
+                LAST_DRONE_MSG = DRONE_MSG_TYPE_KILL_MOTORS;
+    }
     
     if(WIFI_MSG_SENDER_LAST_MSG_SENT()){
         unsigned char msgBuffer[200] = {'\0'};
@@ -222,20 +248,17 @@ void APP_UpdateState(){
         PID_CONFIG heightPid = DRONE_CTRL_GET_HEIGHT_PID();
 
         int ret = snprintf(msgBuffer, sizeof msgBuffer, 
-               "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M:%.1f %.1f %.1f %.1f PID: %.0f Y:%f %f %f P:%f %f %f R:%f %f %f H:%f %f %f %f K"
+               "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M:%.1f %.1f %.1f %.1f PID: %.0f Y:%f %f %f P:%f %f %f R:%f %f %f H:%f %f %f %i K"
                 , dronePose.yaw, LAST_DRONE_MSG ,dronePose.pitch,
                     dronePose.roll, dronePose.zAccel,
                 CURRENT_MOTOR_OUTPUT.topLeft, CURRENT_MOTOR_OUTPUT.topRight,
                      CURRENT_MOTOR_OUTPUT.bottomLeft, CURRENT_MOTOR_OUTPUT.bottomRight,
                     DRONE_CTRL_GET_K(), yawPid.p, yawPid.i, yawPid.d, pitchPid.p, 
                     pitchPid.i, pitchPid.d, rollPid.p, rollPid.i, rollPid.d, 
-                    heightPid.p, heightPid.i, heightPid.d, IMU_MSG_GET_TIME() - LAST_TIME_UPDATE);
+                    heightPid.p, heightPid.i, heightPid.d, ITERATION_COUNTER - LAST_HEARTBEAT);
         
         WIFI_MSG_SENDER_SEND_MSG(msgBuffer, strlen(msgBuffer));
     }
-    if(IMU_MSG_GET_TIME() - LAST_TIME_UPDATE > 0.1){
-        LAST_TIME_UPDATE = IMU_MSG_GET_TIME();
-        DRONE_CTRL_UPDATE(dronePose, IMU_MSG_GET_TIME());
-    }
+
 
 }

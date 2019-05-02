@@ -147,6 +147,11 @@ void DRONE_MSG_HANDLER_UPDATE(){
                                 LAST_K_VALUE = firstValue;
                                 break;
                             }
+                            case 'L':
+                            {
+                                LAST_MSG_TYPE = DRONE_MSG_TYPE_HEARTBEAT;
+                                break;
+                            }
                             default:
                             {
                                 LAST_MSG_TYPE = DRONE_MSG_TYPE_NONE;

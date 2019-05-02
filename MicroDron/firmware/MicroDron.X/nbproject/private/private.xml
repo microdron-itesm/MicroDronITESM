@@ -3,12 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/system_config/default/system_tasks.c</file>
             <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/drone_control/drone_control.c</file>
-            <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/drone_control/drone_pose.h</file>
-            <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/imu_msg_handler.h</file>
-            <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/imu_msg_handler.c</file>
-            <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/drone_control/PID/base_pid.c</file>
+            <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/drone_control/PID/pitch_pid.c</file>
             <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/app.c</file>
+            <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/main.c</file>
         </group>
     </open-files>
 </project-private>
