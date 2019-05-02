@@ -41,6 +41,7 @@ long LAST_HEARTBEAT;
 long MAX_HEARTBEAT_INTERVAL = 2000;
 
 void APP_UpdateState(void);
+long timer1CounterToMs(int ms);
 
 void APP_Initialize(void) {
     ITERATION_COUNTER = 0;
@@ -138,6 +139,12 @@ void APP_Tasks(void) {
 }
 
 void APP_UpdateState(){
+    DRV_TMR1_CounterClear();
+    
+    while(DRV_TMR1_CounterValueGet() < 1000000){
+        //Wait 10 ms
+    }
+    
     ITERATION_COUNTER++;
       
     
@@ -259,6 +266,4 @@ void APP_UpdateState(){
         
         WIFI_MSG_SENDER_SEND_MSG(msgBuffer, strlen(msgBuffer));
     }
-
-
 }
