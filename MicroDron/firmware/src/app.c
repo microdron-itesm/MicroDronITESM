@@ -138,15 +138,7 @@ void APP_Tasks(void) {
     
 }
 
-void APP_UpdateState(){
-    DRV_TMR1_CounterClear();
-    
-    while(DRV_TMR1_CounterValueGet() < 1000000){
-        //Wait 10 ms
-    }
-    
-    ITERATION_COUNTER++;
-      
+void APP_UpdateState(){      
     
     dronePose = IMU_MSG_HANDLER_LAST_POSE();
     
