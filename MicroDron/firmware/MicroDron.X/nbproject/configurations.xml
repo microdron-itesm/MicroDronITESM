@@ -213,7 +213,7 @@
         <platform>2</platform>
       </toolsSet>
       <packs>
-        <pack name="PIC32MZ-EC_DFP" vendor="Microchip" version="1.0.20"/>
+        <pack name="PIC32MZ-EC_DFP" vendor="Microchip" version="1.0.21"/>
       </packs>
       <compileType>
         <linkerTool>
