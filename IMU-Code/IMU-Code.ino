@@ -25,8 +25,6 @@
   - ATSAMD21 (Arduino Zero, SparkFun SAMD21 Breakouts)
 *************************************************************/
 #include <SparkFunMPU9250-DMP.h>
-#include <SparkFunMPL3115A2.h>
-#include <SimpleKalmanFilter.h>
 
 #define SerialPort SerialUSB
 
@@ -129,10 +127,18 @@ void updateImu(void)
     pitch -= 360;
   }
 
+  if (pitch < -180) {
+    pitch += 360;
+  }
 
   roll = imu.roll + 180;
   if (roll > 180) {
     roll -= 360;
   }
+  
+  if (roll < -180) {
+    roll += 360;
+  }
+
   
 }
