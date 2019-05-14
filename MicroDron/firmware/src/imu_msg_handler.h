@@ -9,8 +9,11 @@
 #include "drone_control/drone_pose.h"
 
 /**
- *Simple serial comms handler to obtain IMU data
- * 
+ *Simple serial comms handler to obtain IMU data.
+ *
+ *The IMU message starts with a ',', the state machine waits to read the start character.
+ *Then it starts filling a char array buffer, once a '\n' is received the message is parsed  
+ *and the IMU state is updated.
  */
 
 
@@ -19,26 +22,13 @@ typedef enum {
 	IMU_MSG_HANDLER_STATE_MSG_START,
 	IMU_MSG_HANDLER_STATE_MSG_RECEIVE
 } IMU_MSG_HANDLER_STATE;
-/**
- * Initializes everything that is needed to receive messages from IMU
- */
+
 void IMU_MSG_HANDLER_INITIALIZE();
 
-/**
- * Updates IMU MESSAGE HANDLER's state machine
- */
 void IMU_MSG_HANDLER_UPDATE();
 
-/**
- * Get last valid IMU_POSE from HANDLER
- * @return IMU_POSE
- */
 DRONE_POSE IMU_MSG_HANDLER_LAST_POSE();
 
-/**
- * Get whether there is a new IMU pose available
- * @return  bool
- */
 bool IMU_MSG_HANDLER_NEW_POSE_AVAILABLE();
 
 float IMU_MSG_GET_TIME();

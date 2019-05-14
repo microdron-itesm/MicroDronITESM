@@ -23,6 +23,17 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
  *******************************************************************************/
 // DOM-IGNORE-END
 
+/**
+*This is the main code for the PIC32 MicroDron project, the code runs 3 separate 
+*state machines, one manages the communication from the IMU, another reads incoming data
+*from the Wifi Module and the last one sends telemetry data through the Wifi Module.
+*
+*The drone control loop is only updated once a new valid pose is read from the IMU, roughly
+*every 10 ms.
+*
+*By: Rodrigo Vazquez Villarreal rodv.95@gmail.com 
+*    Alberto Jahuey Moncada     A01039835@itesm.mx
+*/
 
 #include "app.h"
 #include "imu_msg_handler.h"
@@ -140,9 +151,8 @@ void APP_Tasks(void) {
 
 void APP_UpdateState(){      
     
-    dronePose = IMU_MSG_HANDLER_LAST_POSE();
-    
     if(IMU_MSG_HANDLER_NEW_POSE_AVAILABLE()){
+        dronePose = IMU_MSG_HANDLER_LAST_POSE();
         LAST_TIME_UPDATE = IMU_MSG_GET_TIME();
         DRONE_CTRL_UPDATE(dronePose, IMU_MSG_GET_TIME());
     }

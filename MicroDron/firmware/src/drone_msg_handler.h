@@ -7,6 +7,16 @@
 #include "drone_control/drone_motor_output.h"
 #include "drone_control/PID/pid_config.h"
 
+/**
+ *Simple serial comms handler to manage received commands from Wifi Module.
+ *
+ *
+ *A drone Command message starts with a ',', the state machine waits to read the start character.
+ *Then it starts filling a char array buffer, once a '\n' is received the message is parsed  
+ *and the last drone command is updated. This manages the heartbeat update, PID setpoint control
+ *PID Configuration Updates, manual motor control, etc.
+ */
+
 typedef enum {
 	DRONE_MSG_HANDLER_STATE_MSG_START,
 	DRONE_MSG_HANDLER_STATE_MSG_RECEIVE
