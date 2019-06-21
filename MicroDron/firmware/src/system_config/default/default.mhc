@@ -6,7 +6,7 @@
 #     Harmony version: 2.06
 #
 #
-# from /home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
+# from /home/abiel/Documents/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
 #
 CONFIG_APP_INSTANCES=1
 #
@@ -16,7 +16,7 @@ CONFIG_APP_MENU_IDX0=y
 CONFIG_APP_NAME_0="app"
 CONFIG_APP_AUTO_GENERATE_CODE0=n
 #
-# from /home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
+# from /home/abiel/Documents/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
 #
 CONFIG_USE_EXCEPTION_HANDLER=y
 CONFIG_EXCEPTION_USE_SYS_DEBUG=y
@@ -4613,7 +4613,7 @@ CONFIG_CSEQ=0xffff
 #
 # from $HARMONY_VERSION_PATH/config/harmony.hconfig
 #
-CONFIG_PROJECT_STANDALONE=n
+CONFIG_PROJECT_STANDALONE=y
 #
 # from $HARMONY_VERSION_PATH/utilities/mhc/config/project.hconfig
 #

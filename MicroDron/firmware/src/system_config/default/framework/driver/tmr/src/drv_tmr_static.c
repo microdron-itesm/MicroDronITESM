@@ -327,12 +327,12 @@ void DRV_TMR1_Initialize(void)
     PLIB_TMR_ClockSourceSelect ( TMR_ID_4, TMR_CLOCK_SOURCE_PERIPHERAL_CLOCK );
     /* Select prescalar value */
     PLIB_TMR_PrescaleSelect(TMR_ID_4, TMR_PRESCALE_VALUE_1);
-    /* Enable 16 bit mode */
-    PLIB_TMR_Mode16BitEnable(TMR_ID_4);
-    /* Clear counter */ 
-    PLIB_TMR_Counter16BitClear(TMR_ID_4);
+    /* Enable 32 bit mode */
+    PLIB_TMR_Mode32BitEnable(TMR_ID_4);
+    /* Clear counter */
+    PLIB_TMR_Counter32BitClear(TMR_ID_4);
     /*Set period */ 
-    PLIB_TMR_Period16BitSet(TMR_ID_4, 4294967295);
+    PLIB_TMR_Period32BitSet(TMR_ID_4, 4294967295UL);
 }
 
 static void _DRV_TMR1_Resume(bool resume)
@@ -379,20 +379,20 @@ DRV_TMR_CLIENT_STATUS DRV_TMR1_ClientStatus ( void )
 
 void DRV_TMR1_CounterValueSet(uint32_t value)
 {
-    /* Set 16-bit counter value*/
-    PLIB_TMR_Counter16BitSet(TMR_ID_4, (uint16_t)value);
+    /* Set 32-bit counter value*/
+    PLIB_TMR_Counter32BitSet(TMR_ID_4, value);
 }
 
 uint32_t DRV_TMR1_CounterValueGet(void)
 {
-    /* Get 16-bit counter value*/
-    return (uint32_t) PLIB_TMR_Counter16BitGet(TMR_ID_4);
+    /* Get 32-bit counter value*/
+    return PLIB_TMR_Counter32BitGet(TMR_ID_4);
 }
 
 void DRV_TMR1_CounterClear(void)
 {
-    /* Clear 16-bit counter value*/
-    PLIB_TMR_Counter16BitClear(TMR_ID_4);
+    /* Clear 32-bit counter value*/
+    PLIB_TMR_Counter32BitClear(TMR_ID_4);
 }
 
 DRV_TMR_OPERATION_MODE DRV_TMR1_DividerRangeGet
@@ -402,10 +402,10 @@ DRV_TMR_OPERATION_MODE DRV_TMR1_DividerRangeGet
 {
 	if(pDivRange)
 	{
-        pDivRange->dividerMax = DRV_TIMER_DIVIDER_MAX_16BIT;
-        pDivRange->dividerMin = DRV_TIMER_DIVIDER_MIN_16BIT;
+        pDivRange->dividerMax = DRV_TIMER_DIVIDER_MAX_32BIT;
+        pDivRange->dividerMin = DRV_TIMER_DIVIDER_MIN_32BIT;
 		pDivRange->dividerStep = 1;
-		return DRV_TMR_OPERATION_MODE_16_BIT;
+		return DRV_TMR_OPERATION_MODE_32_BIT;
 	}
 	return DRV_TMR_OPERATION_MODE_NONE;
 }
@@ -441,14 +441,14 @@ TMR_PRESCALE DRV_TMR1_PrescalerGet(void)
 
 void DRV_TMR1_PeriodValueSet(uint32_t value)
 {
-    /* Set 16-bit counter value*/
-    PLIB_TMR_Period16BitSet(TMR_ID_4, (uint16_t)value);
+    /* Set 32-bit counter value*/
+    PLIB_TMR_Period32BitSet(TMR_ID_4, value);
 }
 
 uint32_t DRV_TMR1_PeriodValueGet(void)
 {
-    /* Get 16-bit counter value*/
-    return (uint32_t) PLIB_TMR_Period16BitGet(TMR_ID_4);
+    /* Get 32-bit counter value*/
+    return PLIB_TMR_Period32BitGet(TMR_ID_4);
 }
 
 void DRV_TMR1_StopInIdleDisable(void)

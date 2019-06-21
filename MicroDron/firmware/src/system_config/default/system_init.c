@@ -48,8 +48,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "system_config.h"
 #include "system_definitions.h"
-#include "imu_msg_handler.h"
-#include "wifi_msg_sender.h"
 
 
 // ****************************************************************************
@@ -177,7 +175,7 @@ void SYS_Initialize ( void* data )
     /*Initialize TMR1 */
     DRV_TMR1_Initialize();
  
-    sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)NULL);
+     sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)NULL);
     sysObj.drvUsart1 = DRV_USART_Initialize(DRV_USART_INDEX_1, (SYS_MODULE_INIT *)NULL);
     sysObj.drvUsart2 = DRV_USART_Initialize(DRV_USART_INDEX_2, (SYS_MODULE_INIT *)NULL);
 
@@ -185,9 +183,6 @@ void SYS_Initialize ( void* data )
     SYS_PORTS_Initialize();
 
     /* Initialize Middleware */
-    IMU_MSG_HANDLER_INITIALIZE();
-    WIFI_MSG_SENDER_INITIALIZE();
-    DRONE_MSG_HANDLER_INITIALIZE();
 
     /* Initialize the Application */
     APP_Initialize();
