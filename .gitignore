@@ -61,3 +61,4 @@ MicroDron/firmware/MicroDron.X/nbproject/Makefile-genesis.properties
 MicroDron/firmware/MicroDron.X/nbproject/Makefile-default.mk
 
 Harmony/*
+MicroDron/firmware/build/*
