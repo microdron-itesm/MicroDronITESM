@@ -257,7 +257,7 @@ void APP_UpdateState(){
                 LAST_DRONE_MSG = DRONE_MSG_TYPE_KILL_MOTORS;    
     }
     
-    /*if(WIFI_MSG_SENDER_LAST_MSG_SENT()){
+    if(WIFI_MSG_SENDER_LAST_MSG_SENT()){
         unsigned char msgBuffer[200] = {'\0'};
         PID_CONFIG pitchPid = DRONE_CTRL_GET_PITCH_PID();
         PID_CONFIG yawPid = DRONE_CTRL_GET_YAW_PID();
@@ -275,5 +275,5 @@ void APP_UpdateState(){
                     heightPid.p, heightPid.i, heightPid.d, ITERATION_COUNTER - LAST_HEARTBEAT);
         
         WIFI_MSG_SENDER_SEND_MSG(msgBuffer, strlen(msgBuffer));
-    }*/
+    }
 }
