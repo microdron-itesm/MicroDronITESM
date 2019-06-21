@@ -1,3 +1,3 @@
 [submodule "MicroDron/firmware/src/drone_control"]
 	path = MicroDron/firmware/src/drone_control
-	url = https://github.com/AJahueyM/MicroDronITESM_DroneControl.git
+	url = https://github.com/microdron-itesm/MicroDronITESM_DroneControl.git
