@@ -95,6 +95,8 @@ void SYS_Tasks ( void )
 
     /* Maintain the application's state machine. */
     APP_Tasks();
+    
+    SYS_WDT_TimerClear();
 }
 
 

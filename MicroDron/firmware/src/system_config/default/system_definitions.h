@@ -51,6 +51,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system/common/sys_module.h"
 #include "driver/oc/drv_oc.h" 
 #include "system/devcon/sys_devcon.h"
+      #include "system/wdt/sys_wdt.h"
 #include "system/clk/sys_clk.h"
 #include "driver/tmr/drv_tmr_static.h"
 #include "driver/usart/drv_usart_static.h"

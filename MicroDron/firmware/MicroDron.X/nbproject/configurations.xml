@@ -1200,6 +1200,12 @@
                   <itemPath>../src/system_config/default/framework/system/ports/sys_ports.h</itemPath>
                   <itemPath>../src/system_config/default/framework/system/ports/sys_ports_definitions.h</itemPath>
                 </logicalFolder>
+                <logicalFolder name="f8" displayName="wdt" projectFiles="true">
+                  <logicalFolder name="f1" displayName="src" projectFiles="true">
+                    <itemPath>../src/system_config/default/framework/system/wdt/src/sys_wdt_local.h</itemPath>
+                  </logicalFolder>
+                  <itemPath>../src/system_config/default/framework/system/wdt/sys_wdt.h</itemPath>
+                </logicalFolder>
                 <itemPath>../src/system_config/default/framework/system/system.h</itemPath>
               </logicalFolder>
             </logicalFolder>
@@ -1264,6 +1270,11 @@
                     <itemPath>../src/system_config/default/framework/system/ports/src/sys_ports_static.c</itemPath>
                   </logicalFolder>
                 </logicalFolder>
+                <logicalFolder name="f4" displayName="wdt" projectFiles="true">
+                  <logicalFolder name="f1" displayName="src" projectFiles="true">
+                    <itemPath>../src/system_config/default/framework/system/wdt/src/sys_wdt.c</itemPath>
+                  </logicalFolder>
+                </logicalFolder>
               </logicalFolder>
             </logicalFolder>
             <itemPath>../src/system_config/default/system_init.c</itemPath>
@@ -1300,7 +1311,7 @@
         <targetDevice>PIC32MZ2048ECM100</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>PICkit3PlatformTool</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.10</languageToolchainVersion>
         <platform>2</platform>
@@ -1577,10 +1588,10 @@
         <property key="codecoverage.report" value=""/>
         <property key="oscillator.auxfrequency" value="120"/>
         <property key="oscillator.auxfrequencyunit" value="Mega"/>
-        <property key="oscillator.frequency" value="1"/>
+        <property key="oscillator.frequency" value="200"/>
         <property key="oscillator.frequencyunit" value="Mega"/>
-        <property key="oscillator.rcfrequency" value="250"/>
-        <property key="oscillator.rcfrequencyunit" value="Kilo"/>
+        <property key="oscillator.rcfrequency" value="400"/>
+        <property key="oscillator.rcfrequencyunit" value="Mega"/>
         <property key="periphADC1.altscl" value="false"/>
         <property key="periphADC1.minTacq" value=""/>
         <property key="periphADC1.tacqunits" value="microseconds"/>
@@ -1610,13 +1621,13 @@
         <property key="uart10io.uartioenabled" value="false"/>
         <property key="uart1io.output" value="window"/>
         <property key="uart1io.outputfile" value=""/>
-        <property key="uart1io.uartioenabled" value="false"/>
+        <property key="uart1io.uartioenabled" value="true"/>
         <property key="uart2io.output" value="window"/>
         <property key="uart2io.outputfile" value=""/>
-        <property key="uart2io.uartioenabled" value="false"/>
+        <property key="uart2io.uartioenabled" value="true"/>
         <property key="uart3io.output" value="window"/>
         <property key="uart3io.outputfile" value=""/>
-        <property key="uart3io.uartioenabled" value="false"/>
+        <property key="uart3io.uartioenabled" value="true"/>
         <property key="uart4io.output" value="window"/>
         <property key="uart4io.outputfile" value=""/>
         <property key="uart4io.uartioenabled" value="false"/>

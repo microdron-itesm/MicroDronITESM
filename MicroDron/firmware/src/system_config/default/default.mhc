@@ -4518,7 +4518,7 @@ CONFIG_USE_SYS_TMR=n
 #
 # from $HARMONY_VERSION_PATH/framework/system/wdt/config/sys_wdt_pic32m.hconfig
 #
-CONFIG_USE_SYS_WDT=n
+CONFIG_USE_SYS_WDT=y
 #
 # from $HARMONY_VERSION_PATH/framework/test/config/test.hconfig
 #

@@ -50,7 +50,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_definitions.h"
 #include "imu_msg_handler.h"	
 #include "wifi_msg_sender.h"	
-
+#include "system/wdt/sys_wdt.h"
 
 
 // ****************************************************************************
@@ -82,7 +82,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config POSCMOD =    OFF
 #pragma config OSCIOFNC =   OFF
 #pragma config FCKSM =      CSECME
-#pragma config WDTPS =      PS1048576
+#pragma config WDTPS =      PS65536 //Watchdog is expected to be pet every 2 seconds
 #pragma config WDTSPGM =    STOP
 #pragma config FWDTEN =     OFF
 #pragma config WINDIS =     NORMAL
@@ -167,6 +167,9 @@ void SYS_Initialize ( void* data )
     SYS_DEVCON_Initialize(SYS_DEVCON_INDEX_0, (SYS_MODULE_INIT*)NULL);
     SYS_DEVCON_PerformanceConfig(SYS_CLK_SystemFrequencyGet());
 
+    //Initialize watchdog
+    SYS_WDT_Enable(false);
+    
     /* Initialize Drivers */
     /* Initialize the OC Driver */
     DRV_OC0_Initialize();
@@ -192,6 +195,9 @@ void SYS_Initialize ( void* data )
 
     /* Initialize the Application */
     APP_Initialize();
+    
+    //Pet the watchdog after init
+    SYS_WDT_TimerClear();
 }
 
 
