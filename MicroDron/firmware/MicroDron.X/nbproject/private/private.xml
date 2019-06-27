@@ -5,11 +5,9 @@
         <group>
             <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/drone_control/drone_control.c</file>
             <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/drone_msg_handler.h</file>
-            <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/drone_control/drone_config.h</file>
             <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/imu_msg_handler.c</file>
             <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/drone_msg_handler.c</file>
             <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/app.c</file>
-            <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/drone_control/drone_config.c</file>
             <file>file:/home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/src/drone_control/drone_control.h</file>
         </group>
     </open-files>
