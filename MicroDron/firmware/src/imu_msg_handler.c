@@ -13,7 +13,7 @@ float LAST_TIME = 0;
  */
 void IMU_MSG_HANDLER_INITIALIZE(){  
     IMU_MSG_CURRENT_STATE = IMU_MSG_HANDLER_STATE_INIT;
-    IMU_LAST_POSE.zAccel = 0;
+    IMU_LAST_POSE.thrust = 0;
     IMU_LAST_POSE.pitch = 0;
     IMU_LAST_POSE.roll = 0;
     IMU_LAST_POSE.yaw = 0;
@@ -51,7 +51,7 @@ void IMU_MSG_HANDLER_UPDATE(){
                     IMU_MESSAGE[IMU_MESSAGE_INDEX++] = newByte;
                 }else{
                     int ret = sscanf(IMU_MESSAGE, "%f %f %f %f %f",
-                            &IMU_LAST_POSE.yaw, &IMU_LAST_POSE.roll, &IMU_LAST_POSE.pitch, &IMU_LAST_POSE.zAccel, &LAST_TIME );
+                            &IMU_LAST_POSE.yaw, &IMU_LAST_POSE.roll, &IMU_LAST_POSE.pitch, &IMU_LAST_POSE.thrust, &LAST_TIME );
                     
                     NEW_POSE_AVAILABLE = ret == 5;
                     

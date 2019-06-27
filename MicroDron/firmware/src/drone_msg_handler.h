@@ -36,7 +36,7 @@ typedef struct {
 	float yaw;
 	float pitch;
 	float roll;
-	float height;	
+	float thrust;	
 } DRONE_MSG_DATA_UPDATE_SETPOINTS;
 
 

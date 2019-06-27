@@ -12,12 +12,13 @@
             <header-extensions>h</header-extensions>
             <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
+            <make-dep-projects/>
             <sourceRootList>
                 <sourceRootElem>../src</sourceRootElem>
-                <sourceRootElem>../../../../microchip/harmony/v2_06</sourceRootElem>
                 <sourceRootElem>../src/default</sourceRootElem>
                 <sourceRootElem>../src/system_config/default</sourceRootElem>
-                <sourceRootElem>../../../microchip/harmony/v2_06</sourceRootElem>
+                <sourceRootElem>../Harmony</sourceRootElem>
+                <sourceRootElem>../Harmony/framework</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
@@ -28,7 +29,6 @@
             <formatting>
                 <project-formatting-style>false</project-formatting-style>
             </formatting>
-            <make-dep-projects/>
         </data>
     </configuration>
 </project>

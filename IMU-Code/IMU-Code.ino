@@ -1,4 +1,7 @@
 
+#include <Wire.h>
+
+
 #include <Keyboard.h>
 
 /************************************************************
@@ -25,10 +28,13 @@
   - ATSAMD21 (Arduino Zero, SparkFun SAMD21 Breakouts)
 *************************************************************/
 #include <SparkFunMPU9250-DMP.h>
+#include <SparkFunMPL3115A2.h>
 
 #define SerialPort SerialUSB
 
 MPU9250_DMP imu;
+MPL3115A2 myPressure;
+
 float yaw = 0.0f, pitch =0.0f, roll = 0.0f, height = 0.0f;
 float yawInRadians = 0.0f;
 double currentTime = 0.0;
@@ -57,6 +63,12 @@ void setup()
                  DMP_FEATURE_SEND_CAL_GYRO  | // Send calibrated gyro data
                  DMP_FEATURE_6X_LP_QUAT     , // Calculate quat's with accel/gyro
                  100);                         // Set update rate to 10Hz.
+    myPressure.begin();
+    myPressure.setModeAltimeter(); // Measure altitude above sea level in meters
+    //myPressure.setModeBarometer(); // Measure pressure in Pascals from 20 to 110 kPa
+    
+    myPressure.setOversampleRate(7); // Set Oversample to the recommended 128
+    myPressure.enableEventFlags(); // Enable all three pressure and temp event flags 
 
   
 }
@@ -78,10 +90,6 @@ void loop()
           sendState();
       }
   }
-  if(currentTime - lastTimeUpdate > 0.01){
-    sendState();
-    lastTimeUpdate = currentTime;  
-  }
 }
 
 void sendState(){
@@ -96,7 +104,7 @@ void sendState(){
   Serial1.print(" ");
   Serial1.print(roll);
   Serial1.print(" ");
-  Serial1.print(-1.0 - imu.calcAccel(imu.az));
+  Serial1.print(height);
   Serial1.print(" ");
   Serial1.println(String(time));
    
@@ -107,9 +115,7 @@ void sendState(){
   SerialPort.print(" ");
   SerialPort.print(roll);
   SerialPort.print(" ");
-  SerialPort.print(-1.0 - imu.calcAccel(imu.az));
-  SerialPort.print(" ");
-  SerialPort.println(String(time));  
+  SerialPort.println(height);
 }
 
 void updateImu(void)
@@ -139,6 +145,7 @@ void updateImu(void)
   if (roll < -180) {
     roll += 360;
   }
-
+  
+  height = myPressure.readAltitude();
   
 }

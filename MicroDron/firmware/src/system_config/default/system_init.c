@@ -52,7 +52,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "wifi_msg_sender.h"	
 
 
-
 // ****************************************************************************
 // ****************************************************************************
 // Section: Configuration Bits

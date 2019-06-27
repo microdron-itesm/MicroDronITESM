@@ -86,7 +86,7 @@ void DRONE_MSG_HANDLER_UPDATE(){
                                 LAST_DATA_UPDATE_SETPOINTS.yaw = firstValue;
                                 LAST_DATA_UPDATE_SETPOINTS.pitch = secondValue;
                                 LAST_DATA_UPDATE_SETPOINTS.roll = thirdValue;
-                                LAST_DATA_UPDATE_SETPOINTS.height = fourthValue;
+                                LAST_DATA_UPDATE_SETPOINTS.thrust = fourthValue;
                                 break;
                             }
                           
