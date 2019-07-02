@@ -4,9 +4,9 @@
 
 DRONE_MSG_TYPE LAST_MSG_TYPE;
 DRONE_MSG_HANDLER_STATE DRONE_MSG_CURRENT_STATE;
-unsigned char DRONE_MSG[50] = {'\0'};
+unsigned char DRONE_MSG[150] = {'\0'};
 unsigned short int DRONE_MSG_INDEX = 0;
-unsigned short int DRONE_MSG_MAX_SIZE = 50;
+unsigned short int DRONE_MSG_MAX_SIZE = 150;
 
 DRONE_MSG_DATA_UPDATE_SETPOINTS LAST_DATA_UPDATE_SETPOINTS;
 DRONE_CTRL_MOTOR_OUTPUT LAST_DATA_MANUAL_CONTROL;
@@ -22,6 +22,11 @@ float firstValue = 0;
 float secondValue = 0;
 float thirdValue = 0;
 float fourthValue = 0;
+float fifthValue = 0;
+float sixthValue = 0;
+float seventhValue = 0;
+float eighthValue = 0;
+float ninethValue = 0;
                     
 void DRONE_MSG_HANDLER_INITIALIZE(){
     LAST_MSG_TYPE = DRONE_MSG_TYPE_NONE;
@@ -63,9 +68,11 @@ void DRONE_MSG_HANDLER_UPDATE(){
                         NEW_DRONE_MESSAGE = ret == 5;
                         
                     }else if(MSG_ID == 'P'){
-                        ret = sscanf(DRONE_MSG, "%c %c %f %f %f",
-                            &MSG_ID, &PID_UPDATE_TARGET, &firstValue, &secondValue, &thirdValue);
-                        NEW_DRONE_MESSAGE = ret == 5;
+                        ret = sscanf(DRONE_MSG, "%c %c %f %f %f %f %f %f %f %f %f",
+                            &MSG_ID, &PID_UPDATE_TARGET, &firstValue, &secondValue, &thirdValue,
+                                                         &fourthValue, &fifthValue, &sixthValue,
+                                                         &seventhValue, &eighthValue, &ninethValue);
+                        NEW_DRONE_MESSAGE = ret == 11;
                         
                     }else if(MSG_ID == 'K'){
                         ret = sscanf(DRONE_MSG, "%c %f",
@@ -135,9 +142,12 @@ void DRONE_MSG_HANDLER_UPDATE(){
                                 LAST_PID_UPDATE.p = firstValue;
                                 LAST_PID_UPDATE.i = secondValue;
                                 LAST_PID_UPDATE.d = thirdValue;
-                                LAST_PID_UPDATE.clampled = true;
-                                LAST_PID_UPDATE.min = -1.0;
-                                LAST_PID_UPDATE.max = 1.0;
+                                LAST_PID_UPDATE.clamped = fourthValue > 0.0;
+                                LAST_PID_UPDATE.maxOutput = fifthValue;
+                                LAST_PID_UPDATE.minOutput = sixthValue;
+                                LAST_PID_UPDATE.continuous = seventhValue > 0.0;
+                                LAST_PID_UPDATE.maxInput = eighthValue;
+                                LAST_PID_UPDATE.minInput = ninethValue;
 
                                 break;
                             }
