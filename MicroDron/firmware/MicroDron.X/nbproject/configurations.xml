@@ -5,20 +5,23 @@
                    displayName="drone_control"
                    projectFiles="true">
       <logicalFolder name="PID" displayName="PID" projectFiles="true">
-        <itemPath>../src/drone_control/PID/yaw_pid.c</itemPath>
-        <itemPath>../src/drone_control/PID/height_pid.c</itemPath>
-        <itemPath>../src/drone_control/PID/pitch_pid.c</itemPath>
-        <itemPath>../src/drone_control/PID/base_pid.c</itemPath>
+        <itemPath>../src/drone_control/PID/yaw_pid.h</itemPath>
         <itemPath>../src/drone_control/PID/roll_pid.c</itemPath>
+        <itemPath>../src/drone_control/PID/base_pid.c</itemPath>
+        <itemPath>../src/drone_control/PID/height_pid.h</itemPath>
+        <itemPath>../src/drone_control/PID/pid_config.h</itemPath>
+        <itemPath>../src/drone_control/PID/pitch_pid.h</itemPath>
+        <itemPath>../src/drone_control/PID/pitch_pid.c</itemPath>
+        <itemPath>../src/drone_control/PID/height_pid.c</itemPath>
+        <itemPath>../src/drone_control/PID/roll_pid.h</itemPath>
+        <itemPath>../src/drone_control/PID/yaw_pid.c</itemPath>
+        <itemPath>../src/drone_control/PID/base_pid.h</itemPath>
       </logicalFolder>
+      <itemPath>../src/drone_control/drone_config.c</itemPath>
+      <itemPath>../src/drone_control/drone_config.h</itemPath>
       <itemPath>../src/drone_control/drone_control.c</itemPath>
-      <itemPath>../src/drone_control/drone_control.h</itemPath>
       <itemPath>../src/drone_control/drone_pose.h</itemPath>
-      <itemPath>../src/drone_control/PID/base_pid.h</itemPath>
-      <itemPath>../src/drone_control/PID/height_pid.h</itemPath>
-      <itemPath>../src/drone_control/PID/pitch_pid.h</itemPath>
-      <itemPath>../src/drone_control/PID/roll_pid.h</itemPath>
-      <itemPath>../src/drone_control/PID/yaw_pid.h</itemPath>
+      <itemPath>../src/drone_control/drone_control.h</itemPath>
       <itemPath>../src/drone_control/drone_motor_output.h</itemPath>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
@@ -1313,11 +1316,11 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>Simulator</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>2.10</languageToolchainVersion>
+        <languageToolchainVersion>2.15</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
-        <pack name="PIC32MZ-EC_DFP" vendor="Microchip" version="1.0.20"/>
+        <pack name="PIC32MZ-EC_DFP" vendor="Microchip" version="1.0.21"/>
       </packs>
       <compileType>
         <linkerTool>
@@ -1354,7 +1357,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../../../../../microchip/harmony/v2_06/framework;../../../../../../microchip/harmony/v2_06/framework;../src;../src/system_config/default;../src/default;../src/system_config/default/framework"/>
+                  value="../../../../../microchip/harmony/v2_06/framework;../../../../../../microchip/harmony/v2_06/framework;../src;../src/system_config/default;../src/default;../src/system_config/default/framework;"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>

@@ -6,7 +6,7 @@
 #     Harmony version: 2.06
 #
 #
-# from /home/abiel/Documents/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
+# from /home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
 #
 CONFIG_APP_INSTANCES=1
 #
@@ -16,7 +16,7 @@ CONFIG_APP_MENU_IDX0=y
 CONFIG_APP_NAME_0="app"
 CONFIG_APP_AUTO_GENERATE_CODE0=n
 #
-# from /home/abiel/Documents/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
+# from /home/alberto/Documents/Gits/MicroDronITESM/MicroDron/firmware/MicroDron.hconfig
 #
 CONFIG_USE_EXCEPTION_HANDLER=y
 CONFIG_EXCEPTION_USE_SYS_DEBUG=y
@@ -786,10 +786,10 @@ CONFIG_BSP_PIN_4_CN=""
 CONFIG_BSP_PIN_4_PU=""
 CONFIG_BSP_PIN_4_PD=""
 CONFIG_BSP_PIN_5_FUNCTION_NAME=""
-CONFIG_BSP_PIN_5_FUNCTION_TYPE=""
+CONFIG_BSP_PIN_5_FUNCTION_TYPE="GPIO_IN"
 CONFIG_BSP_PIN_5_PORT_PIN="7"
 CONFIG_BSP_PIN_5_PORT_CHANNEL="E"
-CONFIG_BSP_PIN_5_MODE=""
+CONFIG_BSP_PIN_5_MODE="DIGITAL"
 CONFIG_BSP_PIN_5_DIR=""
 CONFIG_BSP_PIN_5_LAT=""
 CONFIG_BSP_PIN_5_OD=""

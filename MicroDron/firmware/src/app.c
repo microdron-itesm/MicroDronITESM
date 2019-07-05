@@ -57,13 +57,13 @@ long timer1CounterToMs(int ms);
 void APP_Initialize(void) {
     ITERATION_COUNTER = 0;
     LAST_HEARTBEAT = 0;
-    
+
     LAST_TIME_UPDATE = 0.0f;
-    dronePose.zAccel = 0.0;
+    dronePose.thrust = 0.0;
     dronePose.pitch = 0.0;
     dronePose.roll = 0.0;
     dronePose.yaw = 0.0;
-    LAST_UPDATE_SETPOINT.height = 0;
+    LAST_UPDATE_SETPOINT.thrust = 0;
     LAST_UPDATE_SETPOINT.pitch = 0;
     LAST_UPDATE_SETPOINT.roll = 0;
     LAST_UPDATE_SETPOINT.yaw = 0;
@@ -89,8 +89,9 @@ void APP_Initialize(void) {
     DRV_OC1_PulseWidthSet(0);
     DRV_OC2_PulseWidthSet(0);
     DRV_OC3_PulseWidthSet(0); 
-    DRONE_CTRL_USE_MANUAL_THRUST(true);
+    DRONE_CTRL_USE_MANUAL_THRUST(false);
     DRONE_CTRL_SET_MANUAL_THRUST(0.0);
+    DRONE_CTRL_SET_OFFSET_THRUST(0.0);
 }
 
 void APP_Tasks(void) {
@@ -150,7 +151,7 @@ void APP_Tasks(void) {
 }
 
 void APP_UpdateState(){      
-    
+    ITERATION_COUNTER++;
     if(IMU_MSG_HANDLER_NEW_POSE_AVAILABLE()){
         dronePose = IMU_MSG_HANDLER_LAST_POSE();
         LAST_TIME_UPDATE = IMU_MSG_GET_TIME();
@@ -170,7 +171,12 @@ void APP_UpdateState(){
             case DRONE_MSG_TYPE_UPDATE_SETPOINTS:
             {
                 LAST_UPDATE_SETPOINT = DRONE_MSG_HANDLER_DATA_UPDATE_SETPOINTS();
-                DRONE_CTRL_SET_MANUAL_THRUST(LAST_UPDATE_SETPOINT.height);
+                if(DRONE_CTRL_USING_MANUAL_THRUST()){
+                    DRONE_CTRL_SET_MANUAL_THRUST(LAST_UPDATE_SETPOINT.thrust);
+                }else{
+                    DRONE_CTRL_SET_OFFSET_THRUST(LAST_UPDATE_SETPOINT.thrust);
+                }
+                
                 DRONE_CTRL_SET_TARGET_PITCH(LAST_UPDATE_SETPOINT.pitch);
                 DRONE_CTRL_SET_TARGET_ROLL(LAST_UPDATE_SETPOINT.roll);
                 DRONE_CTRL_SET_TARGET_YAW(LAST_UPDATE_SETPOINT.yaw);
@@ -209,11 +215,6 @@ void APP_UpdateState(){
                         DRONE_CTRL_SET_YAW_PID(DRONE_MSG_HANDLER_GET_PID_CONFIG_UPDATE());
                         break;
                     }
-                    case 'H':
-                    {
-                        DRONE_CTRL_SET_HEIGHT_PID(DRONE_MSG_HANDLER_GET_PID_CONFIG_UPDATE());
-                        break;
-                    }
                     default:
                     {
                         break;
@@ -241,13 +242,13 @@ void APP_UpdateState(){
         }
     }   
 
-    /*if(ITERATION_COUNTER - LAST_HEARTBEAT > MAX_HEARTBEAT_INTERVAL){
+    if(ITERATION_COUNTER - LAST_HEARTBEAT > MAX_HEARTBEAT_INTERVAL){
                 CURRENT_MOTOR_OUTPUT.bottomLeft = 0;
                 CURRENT_MOTOR_OUTPUT.bottomRight = 0;
                 CURRENT_MOTOR_OUTPUT.topLeft = 0;
                 CURRENT_MOTOR_OUTPUT.topRight = 0;
                 LAST_DRONE_MSG = DRONE_MSG_TYPE_KILL_MOTORS;
-    }*/
+    }
     
     if(abs(dronePose.pitch) > 50 || abs(dronePose.roll) > 50){
                 CURRENT_MOTOR_OUTPUT.bottomLeft = 0;
@@ -262,17 +263,16 @@ void APP_UpdateState(){
         PID_CONFIG pitchPid = DRONE_CTRL_GET_PITCH_PID();
         PID_CONFIG yawPid = DRONE_CTRL_GET_YAW_PID();
         PID_CONFIG rollPid = DRONE_CTRL_GET_ROLL_PID();
-        PID_CONFIG heightPid = DRONE_CTRL_GET_HEIGHT_PID();
 
         int ret = snprintf(msgBuffer, sizeof msgBuffer, 
-               "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M:%.1f %.1f %.1f %.1f PID: %.0f Y:%f %f %f P:%f %f %f R:%f %f %f H:%f %f %f %i K"
+               "Y:%.2f M:%d P:%.2f R:%.2f H:%.2f  M:%.1f %.1f %.1f %.1f PID: %.0f Y:%f %f %f P:%f %f %f R:%f %f %f %i K"
                 , dronePose.yaw, LAST_DRONE_MSG ,dronePose.pitch,
-                    dronePose.roll, dronePose.zAccel,
+                    dronePose.roll, dronePose.thrust,
                 CURRENT_MOTOR_OUTPUT.topLeft, CURRENT_MOTOR_OUTPUT.topRight,
                      CURRENT_MOTOR_OUTPUT.bottomLeft, CURRENT_MOTOR_OUTPUT.bottomRight,
                     DRONE_CTRL_GET_K(), yawPid.p, yawPid.i, yawPid.d, pitchPid.p, 
-                    pitchPid.i, pitchPid.d, rollPid.p, rollPid.i, rollPid.d, 
-                    heightPid.p, heightPid.i, heightPid.d, ITERATION_COUNTER - LAST_HEARTBEAT);
+                    pitchPid.i, pitchPid.d, rollPid.p, rollPid.i, rollPid.d,
+                    ITERATION_COUNTER - LAST_HEARTBEAT);
         
         WIFI_MSG_SENDER_SEND_MSG(msgBuffer, strlen(msgBuffer));
     }

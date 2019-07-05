@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "string.h": "c"
+        "string.h": "c",
+        "drone_config.h": "c",
+        "drone_control.h": "c",
+        "height_pid.h": "c"
     }
 }
