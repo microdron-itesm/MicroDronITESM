@@ -52,6 +52,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "wifi_msg_sender.h"	
 #include "system/wdt/sys_wdt.h"
 
+
 // ****************************************************************************
 // ****************************************************************************
 // Section: Configuration Bits
@@ -166,9 +167,6 @@ void SYS_Initialize ( void* data )
     SYS_DEVCON_Initialize(SYS_DEVCON_INDEX_0, (SYS_MODULE_INIT*)NULL);
     SYS_DEVCON_PerformanceConfig(SYS_CLK_SystemFrequencyGet());
 
-    //Initialize watchdog
-    SYS_WDT_Enable(false);
-    
     /* Initialize Drivers */
     /* Initialize the OC Driver */
     DRV_OC0_Initialize();
@@ -194,9 +192,6 @@ void SYS_Initialize ( void* data )
 
     /* Initialize the Application */
     APP_Initialize();
-    
-    //Pet the watchdog after init
-    SYS_WDT_TimerClear();
 }
 
 

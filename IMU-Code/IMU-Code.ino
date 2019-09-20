@@ -1,7 +1,8 @@
 
 #include <Wire.h>
+
+
 #include <Keyboard.h>
-#include "SensorFusion.h" //SF
 
 /************************************************************
   MPU9250_DMP_Quaternion
@@ -9,20 +10,16 @@
   Jim Lindblom @ SparkFun Electronics
   original creation date: November 23, 2016
   https://github.com/sparkfun/SparkFun_MPU9250_DMP_Arduino_Library
-
   The MPU-9250's digital motion processor (DMP) can calculate
   four unit quaternions, which can be used to represent the
   rotation of an object.
-
   This exmaple demonstrates how to configure the DMP to
   calculate quaternions, and prints them out to the serial
   monitor. It also calculates pitch, roll, and yaw from those
   values.
-
   Development environment specifics:
   Arduino IDE 1.6.12
   SparkFun 9DoF Razor IMU M0
-
   Supported Platforms:
   - ATSAMD21 (Arduino Zero, SparkFun SAMD21 Breakouts)
 *************************************************************/
@@ -33,7 +30,6 @@
 
 MPU9250_DMP imu;
 MPL3115A2 myPressure;
-SF fusion;
 
 float yaw = 0.0f, pitch =0.0f, roll = 0.0f, height = 0.0f;
 float yawInRadians = 0.0f;
@@ -43,7 +39,7 @@ double lastTimeUpdate = 0.0f;
 void setup()
 {
   Serial1.begin(115200);
-  SerialPort.begin(115200);
+
   // Call imu.begin() to verify communication and initialize
   if (imu.begin() != INV_SUCCESS)
   {
@@ -55,12 +51,15 @@ void setup()
       delay(5000);
     }
   }
-    imu.setGyroFSR(2000); // Set gyro to 2000 dps
-    imu.setAccelFSR(2); // Set accel to +/-2g
-    imu.setSampleRate(1000);
-    imu.setCompassSampleRate(100);
-    imu.setLPF(188);
+    imu.begin(); // Initialize the MPU-9250.
 
+    // Initialize the digital motion processor
+    imu.dmpBegin(DMP_FEATURE_SEND_RAW_ACCEL | // Send accelerometer data
+                 DMP_FEATURE_GYRO_CAL       | // Calibrate the gyro data
+                 DMP_FEATURE_SEND_CAL_GYRO  | // Send calibrated gyro data
+                 DMP_FEATURE_6X_LP_QUAT     , // Calculate quat's with accel/gyro
+                 100);                        // Set update rate to 100Hz.
+    imu.setLPF(5);
     myPressure.begin();
     myPressure.setModeAltimeter(); // Measure altitude above sea level in meters
     //myPressure.setModeBarometer(); // Measure pressure in Pascals from 20 to 110 kPa
@@ -73,30 +72,20 @@ void setup()
 
 void loop()
 {
-  if ( imu.dataReady() ) // If new IMU data is available
+  
+  if ( imu.fifoAvailable() > 0 ) // Check for new data in the FIFO
   {
-      imu.update(); // Update all sensor's
-      float accelX = imu.calcAccel(imu.ax); // accelX is x-axis acceleration in g's
-      float accelY = imu.calcAccel(imu.ay); // accelY is y-axis acceleration in g's
-      float accelZ = imu.calcAccel(imu.az); // accelZ is z-axis acceleration in g's
-
-      float gyroX = imu.calcGyro(imu.gx) * M_PI / 180.0; // gyroX is x-axis rotation in dps
-      float gyroY = imu.calcGyro(imu.gy) * M_PI / 180.0; // gyroY is y-axis rotation in dps
-      float gyroZ = imu.calcGyro(imu.gz) * M_PI / 180.0; // gyroZ is z-axis rotation in dps
-
-      float magX = imu.calcMag(imu.mx); // magX is x-axis magnetic field in uT
-      float magY = imu.calcMag(imu.my); // magY is y-axis magnetic field in uT
-      float magZ = imu.calcMag(imu.mz); // magZ is z-axis magnetic field in uT
-      float deltat = fusion.deltatUpdate();
-      fusion.MadgwickUpdate(gyroX, gyroY, gyroZ, accelX, accelY, accelZ, magX, magY, magZ, deltat);
-      //fusion.MahonyUpdate(gyroX, gyroY, gyroZ, accelX, accelY, accelZ, magX, magY, magZ, deltat);
-
-      pitch = fusion.getPitch();
-      roll = fusion.getRoll() + 180.0;    //you could also use getRollRadians() ecc
-      yaw = fusion.getYaw();
-
-      updateImu();
-      sendState();
+      // Use dmpUpdateFifo to update the ax, gx, qx, etc. values
+      if ( imu.dmpUpdateFifo() == INV_SUCCESS )
+      {
+          // The following variables will have data from the top of the FIFO:
+          // imu.ax, imu.ay, imu.az, -- Accelerometer
+          // imu.gx, imu.gy, imu.gz -- calibrated gyroscope
+          // and imu.qw, imu.qx, imu.qy, and imu.qz -- quaternions
+          imu.computeEulerAnglesX();
+          updateImu();
+          sendState();
+      }
   }
 }
 
@@ -128,10 +117,15 @@ void sendState(){
 
 void updateImu(void)
 {
-   if (yaw > 180) {
+ 
+  yaw = imu.yaw;
+  if (yaw > 180) {
     yaw -= 360;
   }
 
+  yawInRadians = yaw * PI / 180.0;
+  
+   pitch = imu.pitch;
   if (pitch > 180) {
     pitch -= 360;
   }
@@ -140,6 +134,7 @@ void updateImu(void)
     pitch += 360;
   }
 
+  roll = imu.roll + 180;
   if (roll > 180) {
     roll -= 360;
   }
