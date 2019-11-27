@@ -242,13 +242,13 @@ void APP_UpdateState(){
         }
     }   
 
-    if(ITERATION_COUNTER - LAST_HEARTBEAT > MAX_HEARTBEAT_INTERVAL){
+    /*if(ITERATION_COUNTER - LAST_HEARTBEAT > MAX_HEARTBEAT_INTERVAL){
                 CURRENT_MOTOR_OUTPUT.bottomLeft = 0;
                 CURRENT_MOTOR_OUTPUT.bottomRight = 0;
                 CURRENT_MOTOR_OUTPUT.topLeft = 0;
                 CURRENT_MOTOR_OUTPUT.topRight = 0;
                 LAST_DRONE_MSG = DRONE_MSG_TYPE_KILL_MOTORS;
-    }
+    }*/
     
     if(abs(dronePose.pitch) > 50 || abs(dronePose.roll) > 50){
                 CURRENT_MOTOR_OUTPUT.bottomLeft = 0;
