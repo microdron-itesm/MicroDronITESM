@@ -89,7 +89,7 @@ void APP_Initialize(void) {
     DRV_OC1_PulseWidthSet(0);
     DRV_OC2_PulseWidthSet(0);
     DRV_OC3_PulseWidthSet(0); 
-    DRONE_CTRL_USE_MANUAL_THRUST(false);
+    DRONE_CTRL_USE_MANUAL_THRUST(true);
     DRONE_CTRL_SET_MANUAL_THRUST(0.0);
     DRONE_CTRL_SET_OFFSET_THRUST(0.0);
 }
