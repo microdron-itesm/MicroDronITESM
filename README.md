@@ -1,6 +1,6 @@
 # MicroDronITESM Hi
 Proyecto para colaboracion con el proyecto de Micro Dron
-1. Clonar en una máquina con Linux, de preferencia Ubuntu 16, el proyecto MicroDronITESM. Desde línea de comandos, se debe de navegar a la carpeta donde se guardará y teclear:
+1. Clonar en una máquina con Linux, de preferencia Ubuntu 18, el proyecto MicroDronITESM. Desde línea de comandos, se debe de navegar a la carpeta donde se guardará y teclear:
 `git clone --recurse-submodules https://github.com/microdron-itesm/MicroDronITESM.git >`
 2. Se debe de tener el MPLAB IDE instalado en la máquina. Para hacerlo, se debe de acceder a la página del desarrollador Microchip y descargar la versión de Linux. Seguir las instrucciones de tal página para instalar.
 3. Ya con MPLAB IDE, abrir el proyecto del MicroDron.X, encontrado dentro del directorio ./MicroDron/firmware
