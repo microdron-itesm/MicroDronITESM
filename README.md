@@ -1,4 +1,4 @@
-# MicroDronITESM Hi
+# MicroDronITESM
 Proyecto para colaboracion con el proyecto de Micro Dron
 1. Clonar en una máquina con Linux, de preferencia Ubuntu 18, el proyecto MicroDronITESM. Desde línea de comandos, se debe de navegar a la carpeta donde se guardará y teclear:
 `git clone --recurse-submodules https://github.com/microdron-itesm/MicroDronITESM.git >`
